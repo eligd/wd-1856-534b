@@ -42,3 +42,5 @@ We observed 16 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 (Note: AIJ light curve fit is not critical since we'll redo the fit with MCMC.)
 - Click on Multi-plot Main and save using “save all (with options).” Save the following values to a spreadsheet, then convert the spreadsheet to .csv format with ASCII (Western) encoding. Make sure no decimals get truncated in the spreadsheet (may need to adjust # decimal points in Excel $\to$ Format $\to$ Cells $\to$ Number).
 ![Spreadsheet Columns](imgs/spreadsheet_cols.png)
+
+## Light Curve Fitting (individual transits)
