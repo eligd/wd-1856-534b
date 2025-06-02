@@ -38,19 +38,10 @@ We observed 16 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 
 - Check multi-plot reference star settings to make sure all comparison stars are good. If not, replace yellow/red comparison stars and rerun.
 - Multi-plot Y-data: select which quantities to plot (always use BJD_TDB on x-axis), add lightcurve under “Fit Mode” for target (bottom option in menu), set legend labels, check "Show Error”
-![AIJ Multi-Plot Part 1](imgs/multiplot1.png)
-![AIJ Multi-Plot Part 2](imgs/multiplot2.png)
 - Multi-plot Main: set title and subtitle, select auto X/Y-range under X/Y-Axis Scaling, enter predicted ingress/egress under V. Marker 1/2 and check the boxes to display, click Copy under Fit and Normalize Region Selection to send the predicted ingress and egress to the lightcurve model
-<div style="text-align: center;">
-    <img src="imgs/multiplot_main.png" alt="AIJ Multi-Plot Main" width="600"/>
-</div>
 
-- Data Set 1 Fit Settings: enter orbital period and eccentricity (uncheck Circle), enter one host star parameter, check the first boxes in the rows labeled “Linear LD u1” and “Quad LD u2”, check “Auto Update Fit”, and verify that transit duration (t14 hms) is comparable to the expected value
-<div style="text-align: center;">
-    <img src="imgs/fit_settings.png" alt="Light Curve Fit Settings" width="600"/>
-</div>
+- Data Set 1 Fit Settings: enter orbital period and eccentricity (uncheck Circle), enter one host star parameter, check the first boxes in the rows labeled “Linear LD u1” and “Quad LD u2”, check “Auto Update Fit”, and verify that transit duration (t14 hms) is comparable to the expected value (note: AIJ light curve fit is not critical since we'll redo the fit with MCMC)
 
-(Note: AIJ light curve fit is not critical since we'll redo the fit with MCMC.)
 - Click on Multi-plot Main and save using “save all (with options).” Save the following values to a spreadsheet, then convert the spreadsheet to .csv format with ASCII (Western) encoding. Make sure no decimals get truncated in the spreadsheet (may need to adjust # decimal points in Excel $\to$ Format $\to$ Cells $\to$ Number).
 <div style="text-align: center;">
     <img src="imgs/spreadsheet_cols.png" alt="Spreadsheet Columns" width="400"/>
