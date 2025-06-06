@@ -49,4 +49,10 @@ We observed 16 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 
 ## Light Curve Fitting (individual transits)
 - preprocess.ipynb: load data, plot raw lightcurves, remove outliers, and normalize
-- fit_lightcurve.ipynb: fit individual lightcurve with MCMC
+- fit_lightcurves/fit_lightcurve_{date}.ipynb: fit individual lightcurve with MCMC
+
+## Next
+- Finish running and saving all individual light curve fits
+- Combined light curve fit (with limb darkening coefficients as free parameters)
+- JWST lightcurve
+- TESS data
