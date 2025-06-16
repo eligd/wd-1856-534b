@@ -4,7 +4,7 @@
 This repository contains the code to accompany our study of exoplanet WD 1856+534 b. We have reduced and fit lightcurves to 16 transit observations obtained with the 1m Nickel Telescope at Lick Observatory. We used the resulting midtransit times to follow up on preliminary evidence of orbital decay in this system, but ultimately found that orbital decay is not needed to explain the observations. Lastly, we have studied data from [INSERT DISCUSSION OF OTHER DATA SOURCES].
 
 ## Transits
-We observed 16 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. 
+We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. 
 
 - April 1, 2022
 - June 2, 2022
@@ -22,6 +22,7 @@ We observed 16 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 - August 14, 2024
 - May 17, 2025
 - May 24, 2025
+- June 7, 2025
 
 ## Data Reduction Procedure
 - Download flats, biases, and science data from Mount Hamilton data repository (https://mthamilton.ucolick.org/data/)
@@ -50,9 +51,9 @@ We observed 16 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 ## Light Curve Fitting (individual transits)
 - preprocess.ipynb: load data, plot raw lightcurves, remove outliers, and normalize
 - fit_lightcurves/fit_lightcurve_{date}.ipynb: fit individual lightcurve with MCMC
+- fit_lightcurves/fit_combined_lightcurve.ipynb: fit combined lightcurve (including all 17 transits)
 
 ## Next
-- Finish running and saving all individual light curve fits
-- Combined light curve fit (with limb darkening coefficients as free parameters)
+- Orbital decay model
 - JWST lightcurve
 - TESS data
