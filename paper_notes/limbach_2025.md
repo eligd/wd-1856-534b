@@ -1,0 +1,15 @@
+# Thermal Emission and Confirmation of the Frigid White Dwarf Exoplanet WD 1856+534 b 
+- Paper link: https://iopscience.iop.org/article/10.3847/2041-8213/adc9ad/pdf
+- Detecting light from exoplanet easier around white dwarf (WD) because host star is relatively faint
+- Planet and WD expected to have comparable brightness in mid-infrared
+- JWST MIRI data collected on 2024-07-29 (*not* during transit)
+- JWST pipeline yielded "nonuniform background structure" in MIRI images, so the authors reprocessed the data with MEOW (https://github.com/kevin218/Magic)
+- Model WD's spectral energy distribution (SED) using physical parameters from MacDonald et al. JWST observations (which I haven't been able to locate)
+- Perform aperture photometry on MIRI data and subtract expected WD flux to compute planet's flux excess
+- Flux excess observed at 12.8, 15, and 18 μm
+- Infrared features in WD spectrum not seen in NIRSpec data and thus not expected in MIRI data
+- Alternative explanations for observed IR excess (debris disk, cmpanions, spatially unresolved background source) all considered unlikely
+- Estimate blackbody temperature of planet as $186^{+6}_{-7}$ K
+- Can also use JWST data for atmospheric modeling and compute planet temperature from there, but due to limited quantity of data so far the atmospheric modeling does not offer a significant advantage over the blackbody model
+- Estimate planet's mass as $5.2^{+0.7}_{-0.8}$ Jupiter masses from temperature of planet and age of system, which confirms WD 1856+534 b is an exoplanet rather than a brown dwarf
+- WD 1856+534 b is sufficiently close to WD that it would have been destroyed during red giant phase if it was so close in at the time (i.e., lies in "forbidden zone")
