@@ -53,10 +53,14 @@ We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 ## Light Curve Fitting (individual transits)
 - preprocess.ipynb: load data, plot raw lightcurves, remove outliers, and normalize
 - fit_lightcurves/fit_lightcurve_{date}.ipynb: fit individual lightcurve with MCMC
-- fit_lightcurves/fit_combined_lightcurve.ipynb: fit combined lightcurve (including all 17 transits)
+- fit_lightcurves/fit_combined_lightcurve.ipynb: fit combined lightcurve (including all 17 transits, see below)
+<div style="text-align: center;">
+    <img src="imgs/combined_lightcurve.png" alt="Spreadsheet Columns" width="400"/>
+</div>
 
 ## Orbital Decay Model
-- 
+- Fit linear and quadratic orbital decay models and calculate relevant statistics (chi-squared, BIC)
+- No evidence for orbital decay found (i.e., no advantage to using quadratic model over linear model)
 
 ## JWST Spectra
 - MAST lists three proposals for observing the WD with JWST, of which only one (https://www.stsci.edu/jwst/phase2-public/2358.pdf) has publicly available science data
@@ -75,7 +79,10 @@ We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
         - 5 with 24 minute exposure time, 6 with 8 minute exposure time, 12 with 2.6 minute exposure time
     - 51 TOI observations
         - 33 with 2 minute exposure time, 18 with 20 second exposure time
-- Start by analyzing the earlier observation with 20 second exposure time, dated 2021-06-25
+- For now, I plotted examples of TESS data with 20 and 120 second exposure time against expected transit times; the data are very noisy (which makes sense given that the WD is much fainter than the targets TESS is designed for), but the transits are evident in at least the 120 second exposures (see below)
+<div style="text-align: center;">
+    <img src="imgs/tess_exp_120s.png" alt="Spreadsheet Columns" width="600"/>
+</div>
 
 ## Literature Review
 - Notes from papers on WD 1856+534 b can be found in the `paper_notes` directory
