@@ -1,9 +1,6 @@
 # WD 1856+534 b
 
-## Overview
-This repository contains the code to accompany our study of exoplanet WD 1856+534 b. We have reduced and fit lightcurves to 7 transit observations obtained with the 1m Nickel Telescope at Lick Observatory. We used the resulting midtransit times to follow up on preliminary evidence of orbital decay in this system, but ultimately found that orbital decay is not needed to explain the observations. Lastly, we have studied data from [INSERT DISCUSSION OF OTHER DATA SOURCES].
-
-## Transits
+## Nickel Data
 We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. 
 
 - April 1, 2022
