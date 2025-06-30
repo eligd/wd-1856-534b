@@ -77,6 +77,7 @@ We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
     - 51 TOI observations
         - 33 with 2 minute exposure time, 18 with 20 second exposure time
 - I plotted examples of TESS data with 20 and 120 second exposure times against expected transit times; the data are very noisy (which makes sense given that the WD is much fainter than the targets TESS is designed for), but the transits are evident in at least the 120 second exposures (see below)
+- I also produced a phase-folded light curve using all the TESS data available with 120 second exposures, but there is still too much noise to fit a light curve to the data with reasonable accuracy (even after averaging neighboring points)
 <div style="text-align: center;">
     <img src="imgs/tess_exp_120s.png" alt="Spreadsheet Columns" width="600"/>
 </div>
