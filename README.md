@@ -1,7 +1,7 @@
 # WD 1856+534 b
 
 ## Nickel Data
-We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. 
+We observed 19 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. 
 
 - April 1, 2022
 - June 2, 2022
@@ -21,6 +21,7 @@ We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 - May 24, 2025
 - June 7, 2025
 - June 17, 2025
+- July 1, 2025
 
 ## Data Reduction Procedure
 - Download flats, biases, and science data from Mount Hamilton data repository (https://mthamilton.ucolick.org/data/)
@@ -30,6 +31,7 @@ We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
     <img src="imgs/ccd_data_processor.png" alt="CCD Data Processor" width="600"/>
 </div>
 
+- Close AIJ, then reopen and import calibrated files.
 - Click target star (or one of similar size) and go to Analyze $\to$ Plot Seeing Profile. Make sure you’re using the right aperture (three rings). If everything looks good, click “Save Aperture.” If needed, you can adjust the aperture size in multi-aperture measurements.
 - Go to Analyze -> Multi-Aperture. Adjust aperture size if desired; under good conditions, (10, 18, 28) often works well. Click “Aperture Settings” to adjust CCD gain, CCD readout noise, and CCD dark current (see https://mthamilton.ucolick.org/techdocs/detectors/dewar2/dewar2_frame.html). Note that these three values depend on read speed, and be sure to convert the dark current to e-/pix/sec if reported in e-/pix/hr. Click Place Apertures, position apertures over target and comparison stars (see below), and click enter.
 <div style="text-align: center;">
@@ -50,7 +52,7 @@ We observed 17 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 ## Light Curve Fitting (individual transits)
 - preprocess.ipynb: load data, plot raw lightcurves, remove outliers, and normalize
 - fit_lightcurves/fit_lightcurve_{date}.ipynb: fit individual lightcurve with MCMC
-- fit_lightcurves/fit_combined_lightcurve.ipynb: fit combined lightcurve (including all 17 transits, see below)
+- fit_lightcurves/fit_combined_lightcurve.ipynb: fit combined lightcurve (including all 19 transits, see below)
 <div style="text-align: center;">
     <img src="imgs/combined_lightcurve.png" alt="Spreadsheet Columns" width="400"/>
 </div>
