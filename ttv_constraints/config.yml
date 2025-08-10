@@ -1,5 +1,5 @@
 transit_times_filepath: '/Users/eligendreaudistler/Desktop/wd-1856-534b/all_times.csv'
-ref_transit: 2458779.3750828    # from Vanderburg 2020
+ref_transit: 2458779.3750844342 #2458779.3750828    # from Vanderburg 2020
 savepath: '/Users/eligendreaudistler/Desktop/wd-1856-534b/ttv_constraints/arrays/chi2.npy'
 
 G: 0.000295994511               # G in AU^3/day^2/M_sun
@@ -7,7 +7,7 @@ stellar_mass: 0.523             # in units of M_sun, from Vanderburg 2020 and Li
 
 # WD 1856+534 b
 p1_mass: 0.0                    # WD 1856+534 b mass included in stellar mass
-p1_period: 1.4079392036         # in units of days, best fit value from linear fit
+p1_period: 1.4079392031         # in units of days, best fit value from linear fit
 p1_eccentricity: 0.0            # assume circular orbit
 p1_inclination: 88.778          # from Vanderburg 2020
 p1_longnode: 0.0                # longitude of ascending node, defines reference plane
@@ -21,13 +21,13 @@ p2_longnode: 0.0               # fixed for now
 p2_argument: 0.0               # fixed for now
 p2_mass_min: 0.000003          # 1 Earth mass in units of M_sun
 p2_mass_max: 0.0124            # 13 Jupiter masses in units of M_sun
-p2_mass_points: 60
+p2_mass_points: 120
 p2_period_min: 100
 p2_period_max: 2000
-p2_period_points: 20
+p2_period_points: 40
 p2_mean_anomaly_min: 0.0
 p2_mean_anomaly_max: 360.0
-p2_mean_anomaly_points: 20
+p2_mean_anomaly_points: 40
 
 # numerical integration parameters
 time_step: 0.02                # time step (days)

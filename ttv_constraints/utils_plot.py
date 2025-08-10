@@ -33,12 +33,12 @@ def plot_likelihood_ratio(chi2_arr, savepath):
     fig, ax = plt.subplots(figsize=(10, 8))
     fontsize = 20
 
-    const_P_chi2 = 9025.274656376358
+    const_P_chi2 = 91.73502023749768
     likelihood_ratio_log_base_e = - (chi2_arr - const_P_chi2) / 2
-    likelihood_ratio_log_base_10 = np.log10(likelihood_ratio_log_base_e) #likelihood_ratio_log_base_e * np.log10(np.e)
+    likelihood_ratio_log_base_10 = likelihood_ratio_log_base_e * np.log10(np.e)
     likelihood_ratio = np.max(likelihood_ratio_log_base_10, axis=-1) # collapse along mean anomaly axis
 
-    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 2000, 100])#, vmin=-1000, vmax=1000)
+    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 2000, 100], vmin=-3, vmax=3)
     ax.set_aspect('auto')
     ax.set_xlabel('Mass [Jupiter masses]', fontsize=fontsize)
     ax.set_ylabel('Period [days]', fontsize=fontsize)

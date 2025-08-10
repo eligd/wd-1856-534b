@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import argparse
 import ttvfast
+from scipy.optimize import curve_fit
 from tqdm import tqdm
 from multiprocessing import Pool, cpu_count
 
@@ -37,8 +38,26 @@ def get_transit_time_predictions(theta):
     mask = np.logical_and(planet_id == 0, transit_times >= 0)
     return transit_times[mask]
 
+def linear_model(x, m, b):
+    return m*x + b
+
 def get_chi2(obs, exp, uncertainty):
-    chi2 = np.sum((obs-exp)**2 / uncertainty**2)
+    epochs_obs = get_epoch(obs)
+    epochs_exp = get_epoch(exp)
+
+    popt_obs, _ = curve_fit(linear_model, epochs_obs, obs, sigma=uncertainty)
+    popt_exp, _ = curve_fit(linear_model, epochs_exp, exp, sigma=uncertainty)
+
+    m_obs, b_obs = popt_obs
+    m_exp, b_exp = popt_exp
+
+    model_obs = m_obs * epochs_obs + b_obs
+    model_exp = m_exp * epochs_exp + b_exp
+
+    ttv_obs = obs - model_obs
+    ttv_exp = exp - model_exp
+
+    chi2 = np.sum((ttv_obs - ttv_exp)**2 / uncertainty**2)
     return chi2
 
 def loop_body(i):
@@ -136,13 +155,14 @@ p2_mean_anomaly_max = config['p2_mean_anomaly_max']
 p2_mean_anomaly_points = config['p2_mean_anomaly_points']
 p2_mean_anomalies = np.linspace(p2_mean_anomaly_min, p2_mean_anomaly_max, p2_mean_anomaly_points)
 
-t_const_P = t_obs[0] + p1_period * (epochs_obs - epochs_obs[0])
+ref_epoch = get_epoch(ref_transit)
+t_const_P = ref_transit + p1_period * (epochs_obs - ref_epoch)
 obs_ttv = t_obs - t_const_P
 
 
 if __name__ == '__main__':
     print("Constant period model chi2: ", get_chi2(obs_ttv, np.zeros_like(obs_ttv), t_obs_err))
-    
+
     grid_params = np.meshgrid(p2_masses, p2_periods, p2_mean_anomalies, indexing='ij')
     chi2_arr = []
     bar_format = '{l_bar}{bar:20}{r_bar}{bar:-10b}'
