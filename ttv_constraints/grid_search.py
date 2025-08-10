@@ -4,8 +4,69 @@ import pandas as pd
 import argparse
 import ttvfast
 from tqdm import tqdm
+from multiprocessing import Pool, cpu_count
+
 from utils import *
 from utils_plot import *
+
+
+def get_epoch(midtransit):
+    period = p1_period
+    epoch = np.around((midtransit - ref_transit) / period)
+    return epoch
+
+def get_transit_time_predictions(theta):
+    p2_mass, p2_period, p2_eccentricity, p2_inclination, p2_longnode, \
+    p2_argument, p2_mean_anomaly = theta
+    planet2 = ttvfast.models.Planet(
+        mass = p2_mass,
+        period = p2_period,
+        eccentricity = p2_eccentricity,
+        inclination = p2_inclination,
+        longnode = p2_longnode,
+        argument = p2_argument,
+        mean_anomaly = p2_mean_anomaly
+    )
+
+    planets = [planet1, planet2]
+    start_time = ref_transit + start_epoch * p1_period
+    end_time = start_time + duration
+    results = ttvfast.ttvfast(planets, stellar_mass, start_time, time_step, end_time)
+    planet_id = np.array(results['positions'][0])
+    transit_times = np.array(results['positions'][2])
+    mask = np.logical_and(planet_id == 0, transit_times >= 0)
+    return transit_times[mask]
+
+def get_chi2(obs, exp, uncertainty):
+    chi2 = np.sum((obs-exp)**2 / uncertainty**2)
+    return chi2
+
+def loop_body(i):
+    mass_idx = i // (p2_period_points * p2_mean_anomaly_points)
+    period_idx = (i % (p2_period_points * p2_mean_anomaly_points)) // p2_mean_anomaly_points
+    mean_anomaly_idx = i % p2_mean_anomaly_points
+
+    theta = [p2_masses[mass_idx], p2_periods[period_idx], p2_eccentricity, p2_inclination, 
+            p2_longnode, p2_argument, p2_mean_anomalies[mean_anomaly_idx]]
+    t_pred = get_transit_time_predictions(theta)
+    epochs_pred = get_epoch(t_pred)
+
+    t_const_P_pred = t_pred[0] + p1_period * (epochs_pred - epochs_pred[0])
+    mm = t_pred - t_const_P_pred
+    exp_ttv = []
+    tt = []
+    for epoch in epochs_obs:
+        idx = np.where(epochs_pred == epoch)[0]
+        if idx.size != 0:
+            exp_ttv.append(mm[idx[0]])
+            tt.append(t_pred[idx[0]])
+    exp_ttv = np.array(exp_ttv)
+    tt = np.array(tt)
+    R = romer_delay(p1_period, p2_periods[period_idx], p1_mass, p2_masses[mass_idx], stellar_mass, p1_inclination, ref_transit, tt)
+    exp_ttv += R
+
+    chi2 = get_chi2(obs_ttv, exp_ttv, t_obs_err)
+    return chi2
 
 
 # get config file
@@ -52,11 +113,6 @@ planet1 = ttvfast.models.Planet(
     mean_anomaly = p1_mean_anomaly
 )
 
-def get_epoch(midtransit):
-    period = p1_period
-    epoch = np.around((midtransit - ref_transit) / period)
-    return epoch
-
 epochs_obs = get_epoch(t_obs)
 
 # grid search parameters
@@ -80,67 +136,21 @@ p2_mean_anomaly_max = config['p2_mean_anomaly_max']
 p2_mean_anomaly_points = config['p2_mean_anomaly_points']
 p2_mean_anomalies = np.linspace(p2_mean_anomaly_min, p2_mean_anomaly_max, p2_mean_anomaly_points)
 
-grid_params = np.meshgrid(p2_masses, p2_periods, p2_mean_anomalies, indexing='ij')
-
-def get_transit_time_predictions(theta):
-    p2_mass, p2_period, p2_eccentricity, p2_inclination, p2_longnode, \
-    p2_argument, p2_mean_anomaly = theta
-    planet2 = ttvfast.models.Planet(
-        mass = p2_mass,
-        period = p2_period,
-        eccentricity = p2_eccentricity,
-        inclination = p2_inclination,
-        longnode = p2_longnode,
-        argument = p2_argument,
-        mean_anomaly = p2_mean_anomaly
-    )
-
-    planets = [planet1, planet2]
-    start_time = ref_transit + start_epoch * p1_period
-    end_time = start_time + duration
-    results = ttvfast.ttvfast(planets, stellar_mass, start_time, time_step, end_time)
-    planet_id = np.array(results['positions'][0])
-    transit_times = np.array(results['positions'][2])
-    mask = np.logical_and(planet_id == 0, transit_times >= 0)
-    return transit_times[mask]
-
-def get_chi2(obs, exp, uncertainty):
-    chi2 = np.sum((obs-exp)**2 / uncertainty**2)
-    return chi2
-
 t_const_P = t_obs[0] + p1_period * (epochs_obs - epochs_obs[0])
 obs_ttv = t_obs - t_const_P
-print("Constant period model chi2: ", get_chi2(obs_ttv, np.zeros_like(obs_ttv), t_obs_err))
 
-chi2_arr = []
-bar_format = '{l_bar}{bar:20}{r_bar}{bar:-10b}'
-N = p2_mass_points*p2_period_points*p2_mean_anomaly_points
-chi2_arr = np.zeros((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
-for i in tqdm(range(N), desc='Grid Search Progress', unit='points', bar_format=bar_format, total=N):
-    mass_idx = i // (p2_period_points * p2_mean_anomaly_points)
-    period_idx = (i % (p2_period_points * p2_mean_anomaly_points)) // p2_mean_anomaly_points
-    mean_anomaly_idx = i % p2_mean_anomaly_points
 
-    theta = [p2_masses[mass_idx], p2_periods[period_idx], p2_eccentricity, p2_inclination, 
-             p2_longnode, p2_argument, p2_mean_anomalies[mean_anomaly_idx]]
-    t_pred = get_transit_time_predictions(theta)
-    epochs_pred = get_epoch(t_pred)
+if __name__ == '__main__':
+    print("Constant period model chi2: ", get_chi2(obs_ttv, np.zeros_like(obs_ttv), t_obs_err))
+    
+    grid_params = np.meshgrid(p2_masses, p2_periods, p2_mean_anomalies, indexing='ij')
+    chi2_arr = []
+    bar_format = '{l_bar}{bar:20}{r_bar}{bar:-10b}'
+    N = p2_mass_points*p2_period_points*p2_mean_anomaly_points
+    chi2_arr = np.zeros((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
 
-    t_const_P_pred = t_pred[0] + p1_period * (epochs_pred - epochs_pred[0])
-    mm = t_pred - t_const_P_pred
-    exp_ttv = []
-    tt = []
-    for epoch in epochs_obs:
-        idx = np.where(epochs_pred == epoch)[0]
-        if idx.size != 0:
-            exp_ttv.append(mm[idx[0]])
-            tt.append(t_pred[idx[0]])
-    exp_ttv = np.array(exp_ttv)
-    tt = np.array(tt)
-    R = romer_delay(p1_period, p2_periods[period_idx], p1_mass, p2_masses[mass_idx], stellar_mass, p1_inclination, ref_transit, tt)
-    exp_ttv += R
+    with Pool(processes=cpu_count()) as pool:
+        chi2_flattened = list(tqdm(pool.imap(loop_body, range(N)), desc='Grid Search Progress', unit='points', bar_format=bar_format, total=N))
 
-    chi2 = get_chi2(obs_ttv, exp_ttv, t_obs_err)
-    chi2_arr[mass_idx, period_idx, mean_anomaly_idx] = chi2
-    if i%100 == 0:
-        np.save(savepath, chi2_arr)
+    chi2_arr = np.array(chi2_flattened).reshape((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
+    np.save(savepath, chi2_arr)

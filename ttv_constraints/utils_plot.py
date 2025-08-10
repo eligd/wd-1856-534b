@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+plt.rcParams['font.family'] = 'serif'
 
 def plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred, period, savepath):
     fig, ax = plt.subplots(figsize=(8, 8))
@@ -34,15 +35,16 @@ def plot_likelihood_ratio(chi2_arr, savepath):
 
     const_P_chi2 = 9025.274656376358
     likelihood_ratio_log_base_e = - (chi2_arr - const_P_chi2) / 2
-    likelihood_ratio_log_base_10 = likelihood_ratio_log_base_e * np.log10(np.e)
+    likelihood_ratio_log_base_10 = np.log10(likelihood_ratio_log_base_e) #likelihood_ratio_log_base_e * np.log10(np.e)
     likelihood_ratio = np.max(likelihood_ratio_log_base_10, axis=-1) # collapse along mean anomaly axis
-    
-    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 2000, 100], vmin=-1000, vmax=1000)
+
+    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 2000, 100])#, vmin=-1000, vmax=1000)
     ax.set_aspect('auto')
     ax.set_xlabel('Mass [Jupiter masses]', fontsize=fontsize)
     ax.set_ylabel('Period [days]', fontsize=fontsize)
 
-    plt.colorbar(im, ax=ax)
+    cbar = plt.colorbar(im, ax=ax)
+    cbar.set_label('Log Base 10 Likelihood Ratio', rotation=90, labelpad=15, fontsize=18)
     
     plt.savefig(savepath, format='pdf', bbox_inches='tight')
 
