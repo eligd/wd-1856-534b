@@ -43,48 +43,37 @@ def linear_model(x, m, b):
 
 def get_chi2(obs, exp, uncertainty):
     epochs_obs = get_epoch(obs)
-    epochs_exp = get_epoch(exp)
 
-    popt_obs, _ = curve_fit(linear_model, epochs_obs, obs, sigma=uncertainty)
-    popt_exp, _ = curve_fit(linear_model, epochs_exp, exp, sigma=uncertainty)
+    popt, _ = curve_fit(linear_model, epochs_obs, obs, sigma=uncertainty, absolute_sigma=True)
+    m, b = popt
+    const_P_model = m * epochs_obs + b
 
-    m_obs, b_obs = popt_obs
-    m_exp, b_exp = popt_exp
+    ttv_const_P = obs - const_P_model
+    ttv_model = obs - exp
 
-    model_obs = m_obs * epochs_obs + b_obs
-    model_exp = m_exp * epochs_exp + b_exp
-
-    ttv_obs = obs - model_obs
-    ttv_exp = exp - model_exp
-
-    chi2 = np.sum((ttv_obs - ttv_exp)**2 / uncertainty**2)
+    chi2 = np.sum((ttv_const_P - ttv_model)**2 / uncertainty**2)
     return chi2
 
 def loop_body(i):
     mass_idx = i // (p2_period_points * p2_mean_anomaly_points)
     period_idx = (i % (p2_period_points * p2_mean_anomaly_points)) // p2_mean_anomaly_points
     mean_anomaly_idx = i % p2_mean_anomaly_points
-
+        
     theta = [p2_masses[mass_idx], p2_periods[period_idx], p2_eccentricity, p2_inclination, 
             p2_longnode, p2_argument, p2_mean_anomalies[mean_anomaly_idx]]
     t_pred = get_transit_time_predictions(theta)
     epochs_pred = get_epoch(t_pred)
 
-    t_const_P_pred = t_pred[0] + p1_period * (epochs_pred - epochs_pred[0])
-    mm = t_pred - t_const_P_pred
-    exp_ttv = []
     tt = []
     for epoch in epochs_obs:
         idx = np.where(epochs_pred == epoch)[0]
         if idx.size != 0:
-            exp_ttv.append(mm[idx[0]])
             tt.append(t_pred[idx[0]])
-    exp_ttv = np.array(exp_ttv)
     tt = np.array(tt)
     R = romer_delay(p1_period, p2_periods[period_idx], p1_mass, p2_masses[mass_idx], stellar_mass, p1_inclination, ref_transit, tt)
-    exp_ttv += R
-
-    chi2 = get_chi2(obs_ttv, exp_ttv, t_obs_err)
+    tt += R
+    
+    chi2 = get_chi2(t_obs, tt, t_obs_err)
     return chi2
 
 
@@ -161,8 +150,6 @@ obs_ttv = t_obs - t_const_P
 
 
 if __name__ == '__main__':
-    print("Constant period model chi2: ", get_chi2(obs_ttv, np.zeros_like(obs_ttv), t_obs_err))
-
     grid_params = np.meshgrid(p2_masses, p2_periods, p2_mean_anomalies, indexing='ij')
     chi2_arr = []
     bar_format = '{l_bar}{bar:20}{r_bar}{bar:-10b}'
