@@ -56,8 +56,3 @@ $$\frac{\mathcal{R}(t)}{A_{\text{Roem}}} \simeq \left[(1-e^2)^{\frac{1}{2}}\sin{
 $$\frac{\mathcal{R}(t)}{A_{\text{Roem}}} \simeq \sin{u(t)}$$
 - For a non-eccentric orbit, the eccentric anomaly $u$ is equal to the mean anomaly $M$, which can be calculated from the reference transit $t_0$ and the period $P_{\text{inner}}$ of WD 1856+534 b as
 $$u(t)=M(t)=\frac{2\pi}{P_{\text{inner}}}\cdot (t-t_0)$$
-
-## Next steps
-- Implement correction for variable orbital period
-- Update midtransit times (use mid-exposure time)
-- Finish introduction draft

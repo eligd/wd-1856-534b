@@ -31,15 +31,13 @@ def plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred, uncertainty, save
             tt.append(t_pred[idx[0]])
     tt = np.array(tt)
 
-    axs[0].plot(epochs_obs, (t_obs-t_const_P_obs)*24*60, color='tab:blue', linestyle='', marker='.', markersize=10, label='Observed')
-    axs[1].plot(epochs_obs, (t_obs-tt)*24*60, color='tab:blue', linestyle='', marker='.', markersize=10, label='Observed')
-
-    print(t_obs-tt)
+    axs[0].plot(epochs_obs, (t_obs-t_const_P_obs)*24*60, color='cornflowerblue', linestyle='', marker='.', markersize=10, label='Observed', zorder=2)
+    axs[1].plot(epochs_obs, (t_obs-tt)*24*60, color='darkred', linestyle='', marker='.', markersize=10, label='Observed', zorder=2)
 
     labels = ['Constant Period', 'Companion Model']
     for ax, label in zip(axs, labels):
         xmin, xmax = ax.get_xlim()
-        ax.plot([xmin, xmax], [0, 0], color='black', linewidth=2, label=label)
+        ax.plot([xmin, xmax], [0, 0], color='black', linewidth=2, label=label, zorder=1)
         ax.set_ylim(-0.5, 0.5)
 
         ax.set_xlabel('Epoch Number', fontsize=fontsize)
@@ -54,7 +52,7 @@ def plot_likelihood_ratio(chi2_arr, savepath, title=None):
     fontsize = 20
     title_size = 25
 
-    const_P_chi2 = 91.7350202373991
+    const_P_chi2 = 9049.57294572682 #91.7350202373991
     likelihood_ratio_log_base_e = - (chi2_arr - const_P_chi2) / 2
     likelihood_ratio_log_base_10 = likelihood_ratio_log_base_e * np.log10(np.e)
     likelihood_ratio = np.max(likelihood_ratio_log_base_10, axis=-1) # collapse along mean anomaly axis

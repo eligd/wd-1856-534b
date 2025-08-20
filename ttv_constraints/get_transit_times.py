@@ -3,8 +3,6 @@ import numpy as np
 import pandas as pd
 import argparse
 import ttvfast
-from tqdm import tqdm
-from multiprocessing import Pool, cpu_count
 
 from utils import *
 from utils_plot import *
@@ -39,41 +37,6 @@ def get_transit_time_predictions(theta):
 
 def linear_model(x, m, b):
     return m*x + b
-
-def get_chi2(obs_ttv, exp_ttv, uncertainty):
-    ref_idx = np.where(epochs_obs==get_epoch(ref_transit))[0][0]
-    offset = obs_ttv[ref_idx] - exp_ttv[ref_idx]
-    exp_ttv += offset
-    chi2 = np.sum((obs_ttv - exp_ttv)**2 / uncertainty**2)
-    return chi2
-
-def loop_body(i):
-    mass_idx = i // (p2_period_points * p2_mean_anomaly_points)
-    period_idx = (i % (p2_period_points * p2_mean_anomaly_points)) // p2_mean_anomaly_points
-    mean_anomaly_idx = i % p2_mean_anomaly_points
-
-    theta = [p2_masses[mass_idx], p2_periods[period_idx], p2_eccentricity, p2_inclination, 
-            p2_longnode, p2_argument, p2_mean_anomalies[mean_anomaly_idx]]
-    t_pred = get_transit_time_predictions(theta)
-    epochs_pred = get_epoch(t_pred)
-
-    t_const_P_pred = m * epochs_pred + b
-
-    exp_ttv_all = t_pred - t_const_P_pred
-    exp_ttv = []
-    t_p = []
-    for epoch in epochs_obs:
-        idx = np.where(epochs_pred == epoch)[0]
-        if idx.size != 0:
-            exp_ttv.append(exp_ttv_all[idx[0]])
-            t_p.append(t_pred[idx[0]])
-    exp_ttv = np.array(exp_ttv)
-    t_p = np.array(t_p)
-    R = romer_delay(p1_period, p2_periods[period_idx], p1_mass, p2_masses[mass_idx], stellar_mass, p1_inclination, ref_transit, t_p)
-    exp_ttv += R
-
-    chi2 = get_chi2(obs_ttv, exp_ttv, t_obs_err)
-    return chi2
 
 
 # get config file
@@ -149,16 +112,36 @@ obs_ttv = t_obs - (m * epochs_obs + b)
 
 
 if __name__ == '__main__':
-    print('Constant period model chi2: ', get_chi2(obs_ttv, np.zeros_like(obs_ttv), t_obs_err))
-    
+    chi2_arr = np.load(savepath)
+    idx = np.argmin(chi2_arr)
     grid_params = np.meshgrid(p2_masses, p2_periods, p2_mean_anomalies, indexing='ij')
-    chi2_arr = []
-    bar_format = '{l_bar}{bar:20}{r_bar}{bar:-10b}'
-    N = p2_mass_points*p2_period_points*p2_mean_anomaly_points
-    chi2_arr = np.zeros((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
+    mass_idx = idx // (p2_period_points * p2_mean_anomaly_points)
+    period_idx = (idx % (p2_period_points * p2_mean_anomaly_points)) // p2_mean_anomaly_points
+    mean_anomaly_idx = idx % p2_mean_anomaly_points
 
-    with Pool(processes=cpu_count()) as pool:
-        chi2_flattened = list(tqdm(pool.imap(loop_body, range(N)), desc='Grid Search Progress', unit='points', bar_format=bar_format, total=N))
+    p2_mass = p2_masses[mass_idx]
+    p2_period = p2_periods[period_idx]
+    p2_mean_anomaly = p2_mean_anomalies[mean_anomaly_idx]
 
-    chi2_arr = np.array(chi2_flattened).reshape((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
-    np.save(savepath, chi2_arr)
+    theta = [p2_masses[mass_idx], p2_periods[period_idx], p2_eccentricity, p2_inclination, 
+             p2_longnode, p2_argument, p2_mean_anomalies[mean_anomaly_idx]]
+    t_pred = get_transit_time_predictions(theta)
+    epochs_pred = get_epoch(t_pred)
+
+    t_p = []
+    for epoch in epochs_obs:
+        idx = np.where(epochs_pred == epoch)[0]
+        if idx.size != 0:
+            t_p.append(t_pred[idx[0]])
+    t_p = np.array(t_p)
+    R = romer_delay(p1_period, p2_periods[period_idx], p1_mass, p2_masses[mass_idx], stellar_mass, p1_inclination, ref_transit, t_p)
+    t_p += R
+
+    ref_idx = np.where(epochs_obs==get_epoch(ref_transit))[0][0]
+    offset = t_obs[ref_idx] - t_p[ref_idx]
+    t_p += offset
+
+    savepath = 'plots/o-c_new.pdf'
+    print("Mass: ", p2_masses[mass_idx])
+    print("Period: ", p2_periods[period_idx])
+    plot_transit_times(t_obs, epochs_obs, t_p, get_epoch(t_p), t_obs_err, savepath)
