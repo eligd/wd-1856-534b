@@ -2,3 +2,6 @@ data
 arrays
 TESS_data
 *.xlsx
+*_2023.csv
+plots
+__pycache__

@@ -1,6 +1,6 @@
 transit_times_filepath: '/Users/eligendreaudistler/Desktop/wd-1856-534b/all_times.csv'
 ref_transit: 2458779.3750830120 # best fit value from linear fit
-savepath: '/Users/eligendreaudistler/Desktop/wd-1856-534b/ttv_constraints/arrays/chi2_new_log.npy'
+savepath: '/Users/eligendreaudistler/Desktop/wd-1856-534b/ttv_constraints/arrays/chi2_alt2.npy'
 
 G: 0.000295994511               # G in AU^3/day^2/M_sun
 stellar_mass: 0.523             # in units of M_sun, from Vanderburg 2020 and Limbach 2025 (includes star and planet masses)
@@ -15,20 +15,22 @@ p1_argument: 0.0                # argument of periastron, no physical meaning fo
 p1_mean_anomaly: 0.0            # mean anomaly
 
 # grid search parameters for hypothetical outer planet
-p2_eccentricity: 0.0           # fixed for now
+p2_eccentricity: 0.05          # fixed for now
 p2_inclination: 88.778         # fixed for now
 p2_longnode: 0.0               # fixed for now
-p2_argument: 0.0               # fixed for now
 p2_mass_min: 0.000003          # 1 Earth mass in units of M_sun
 p2_mass_max: 0.0124            # 13 Jupiter masses in units of M_sun
-p2_mass_points: 300
+p2_mass_points: 90
 p2_period_min: 50
 p2_period_max: 1500
-p2_period_points: 100
+p2_period_points: 30
 p2_mean_anomaly_min: 0.0
 p2_mean_anomaly_max: 360.0
-p2_mean_anomaly_points: 100
-period_log: True
+p2_mean_anomaly_points: 30
+p2_argument_min: 0.0
+p2_argument_max: 360.0
+p2_argument_points: 30
+period_log: False
 
 # numerical integration parameters
 time_step: 0.02                # time step (days)

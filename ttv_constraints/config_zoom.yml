@@ -1,6 +1,6 @@
 transit_times_filepath: '/Users/eligendreaudistler/Desktop/wd-1856-534b/all_times.csv'
 ref_transit: 2458779.3750830120 # best fit value from linear fit
-savepath: '/Users/eligendreaudistler/Desktop/wd-1856-534b/ttv_constraints/arrays/chi2_new_log.npy'
+savepath: '/Users/eligendreaudistler/Desktop/wd-1856-534b/ttv_constraints/arrays/chi2_zoom_log.npy'
 
 G: 0.000295994511               # G in AU^3/day^2/M_sun
 stellar_mass: 0.523             # in units of M_sun, from Vanderburg 2020 and Limbach 2025 (includes star and planet masses)
@@ -20,10 +20,10 @@ p2_inclination: 88.778         # fixed for now
 p2_longnode: 0.0               # fixed for now
 p2_argument: 0.0               # fixed for now
 p2_mass_min: 0.000003          # 1 Earth mass in units of M_sun
-p2_mass_max: 0.0124            # 13 Jupiter masses in units of M_sun
+p2_mass_max: 0.00381835        # 4 Jupiter masses in units of M_sun
 p2_mass_points: 300
 p2_period_min: 50
-p2_period_max: 1500
+p2_period_max: 400
 p2_period_points: 100
 p2_mean_anomaly_min: 0.0
 p2_mean_anomaly_max: 360.0

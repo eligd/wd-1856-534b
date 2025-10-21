@@ -1,4 +1,5 @@
 import yaml
+import sys
 import numpy as np
 import pandas as pd
 import argparse
@@ -48,12 +49,8 @@ def get_chi2(obs_ttv, exp_ttv, uncertainty):
     return chi2
 
 def loop_body(i):
-    mass_idx = i // (p2_period_points * p2_mean_anomaly_points)
-    period_idx = (i % (p2_period_points * p2_mean_anomaly_points)) // p2_mean_anomaly_points
-    mean_anomaly_idx = i % p2_mean_anomaly_points
-
-    theta = [p2_masses[mass_idx], p2_periods[period_idx], p2_eccentricity, p2_inclination, 
-            p2_longnode, p2_argument, p2_mean_anomalies[mean_anomaly_idx]]
+    theta = [2.49809055e-03,  1.17367712e+03,  3.44279696e-01,  5.14848334e+01, \
+             1.49230053e+02,  1.71541240e+02,  1.68555306e+02]
     t_pred = get_transit_time_predictions(theta)
     epochs_pred = get_epoch(t_pred)
 
@@ -69,10 +66,12 @@ def loop_body(i):
             t_p.append(t_pred[idx[0]])
     exp_ttv = np.array(exp_ttv)
     t_p = np.array(t_p)
-    R = romer_delay(p1_period, p2_periods[period_idx], p1_mass, p2_masses[mass_idx], stellar_mass, p1_inclination, ref_transit, t_p)
+    R = romer_delay(p1_period, theta[1], p1_mass, theta[0], stellar_mass, p1_inclination, ref_transit, t_p)
     exp_ttv += R
 
     chi2 = get_chi2(obs_ttv, exp_ttv, t_obs_err)
+    print(chi2)
+    sys.exit(1)
     return chi2
 
 
@@ -165,5 +164,5 @@ if __name__ == '__main__':
     with Pool(processes=cpu_count()) as pool:
         chi2_flattened = list(tqdm(pool.imap(loop_body, range(N)), desc='Grid Search Progress', unit='points', bar_format=bar_format, total=N))
 
-    chi2_arr = np.array(chi2_flattened).reshape((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
-    np.save(savepath, chi2_arr)
+    #chi2_arr = np.array(chi2_flattened).reshape((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
+    #np.save(savepath, chi2_arr)

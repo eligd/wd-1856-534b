@@ -48,12 +48,15 @@ def get_chi2(obs_ttv, exp_ttv, uncertainty):
     return chi2
 
 def loop_body(i):
-    mass_idx = i // (p2_period_points * p2_mean_anomaly_points)
-    period_idx = (i % (p2_period_points * p2_mean_anomaly_points)) // p2_mean_anomaly_points
-    mean_anomaly_idx = i % p2_mean_anomaly_points
+    #mass_idx = i // (p2_period_points * p2_mean_anomaly_points)
+    #period_idx = (i % (p2_period_points * p2_mean_anomaly_points)) // p2_mean_anomaly_points
+    #mean_anomaly_idx = i % p2_mean_anomaly_points
+
+    shape = (p2_mass_points, p2_period_points, p2_mean_anomaly_points, p2_argument_points)
+    mass_idx, period_idx, mean_anomaly_idx, argument_idx = np.unravel_index(i, shape)
 
     theta = [p2_masses[mass_idx], p2_periods[period_idx], p2_eccentricity, p2_inclination, 
-            p2_longnode, p2_argument, p2_mean_anomalies[mean_anomaly_idx]]
+            p2_longnode, p2_arguments[argument_idx], p2_mean_anomalies[mean_anomaly_idx]]
     t_pred = get_transit_time_predictions(theta)
     epochs_pred = get_epoch(t_pred)
 
@@ -126,7 +129,6 @@ epochs_obs = get_epoch(t_obs)
 p2_eccentricity = config['p2_eccentricity']
 p2_inclination = config['p2_inclination']
 p2_longnode = config['p2_longnode']
-p2_argument = config['p2_argument']
 
 p2_mass_min = config['p2_mass_min']
 p2_mass_max = config['p2_mass_max']
@@ -148,6 +150,11 @@ p2_mean_anomaly_max = config['p2_mean_anomaly_max']
 p2_mean_anomaly_points = config['p2_mean_anomaly_points']
 p2_mean_anomalies = np.linspace(p2_mean_anomaly_min, p2_mean_anomaly_max, p2_mean_anomaly_points)
 
+p2_argument_min = config['p2_argument_min']
+p2_argument_max = config['p2_argument_max']
+p2_argument_points = config['p2_argument_points']
+p2_arguments = np.linspace(p2_argument_min, p2_argument_max, p2_argument_points)
+
 popt, _ = curve_fit(linear_model, epochs_obs, t_obs, sigma=t_obs_err, absolute_sigma=True)
 m, b = popt
 obs_ttv = t_obs - (m * epochs_obs + b)
@@ -159,11 +166,11 @@ if __name__ == '__main__':
     grid_params = np.meshgrid(p2_masses, p2_periods, p2_mean_anomalies, indexing='ij')
     chi2_arr = []
     bar_format = '{l_bar}{bar:20}{r_bar}{bar:-10b}'
-    N = p2_mass_points*p2_period_points*p2_mean_anomaly_points
-    chi2_arr = np.zeros((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
+    N = p2_mass_points*p2_period_points*p2_mean_anomaly_points*p2_argument_points
+    chi2_arr = np.zeros((p2_mass_points, p2_period_points, p2_mean_anomaly_points, p2_argument_points))
 
     with Pool(processes=cpu_count()) as pool:
         chi2_flattened = list(tqdm(pool.imap(loop_body, range(N)), desc='Grid Search Progress', unit='points', bar_format=bar_format, total=N))
 
-    chi2_arr = np.array(chi2_flattened).reshape((p2_mass_points, p2_period_points, p2_mean_anomaly_points))
+    chi2_arr = np.array(chi2_flattened).reshape((p2_mass_points, p2_period_points, p2_mean_anomaly_points, p2_argument_points))
     np.save(savepath, chi2_arr)

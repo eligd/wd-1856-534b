@@ -141,7 +141,9 @@ if __name__ == '__main__':
     offset = t_obs[ref_idx] - t_p[ref_idx]
     t_p += offset
 
-    savepath = 'plots/o-c_new.pdf'
+    savepath = 'plots/o-c_new_zoom.pdf'
     print("Mass: ", p2_masses[mass_idx])
     print("Period: ", p2_periods[period_idx])
+    print("Mean anomaly: ", p2_mean_anomalies[mean_anomaly_idx])
+    print("Min chi2: ", np.min(chi2_arr))
     plot_transit_times(t_obs, epochs_obs, t_p, get_epoch(t_p), t_obs_err, savepath)
