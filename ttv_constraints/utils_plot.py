@@ -197,12 +197,17 @@ def plot_2d_density(flat_samples, savepath):
     plt.savefig(savepath, format='pdf', bbox_inches='tight')
 
 if __name__ == '__main__':
-    chi2_arr = np.load('arrays/chi2_new_log.npy') #chi2_zoom_log.npy')
-    savepath = 'plots/likelihood_ratios_new_log.pdf' #zoom_log.pdf'
-    plot_likelihood_ratio(chi2_arr, savepath, log=True, eccentric=False)
+    #chi2_arr = np.load('arrays/chi2_new_log.npy') #chi2_zoom_log.npy')
+    #savepath = 'plots/likelihood_ratios_new_log.pdf' #zoom_log.pdf'
+    #plot_likelihood_ratio(chi2_arr, savepath, log=True, eccentric=False)
 
-    savepath = 'plots/delta_bic.pdf'
-    plot_delta_bic(chi2_arr, savepath)
+    import pandas as pd
+    df = pd.read_csv('/Users/eligendreaudistler/Desktop/wd-1856-534b/all_times.csv')
+    t_obs = df['T_mid'].to_numpy()
+    plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred)
+
+    #savepath = 'plots/delta_bic.pdf'
+    #plot_delta_bic(chi2_arr, savepath)
 
     #flat_samples = np.load('arrays/flat_samples.npy')
     #flat_samples[:,0] *= 1047.57
