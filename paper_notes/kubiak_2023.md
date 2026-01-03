@@ -1,5 +1,4 @@
 # TTV Constraints on Additional Planets in the WD 1856+534 system
-
 - Paper link: https://arxiv.org/abs/2303.06157
 - Common envelope evolution: planet survives star's red giant phase by ejecting envelope so that it stops falling inward
     - Challenges: low mass and long period compared to other planets known to have undergone common envelope evolution

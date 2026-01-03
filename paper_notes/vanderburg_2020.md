@@ -1,5 +1,4 @@
 # A giant planet candidate transiting a white dwarf
-
 - Paper link: https://www.nature.com/articles/s41586-020-2713-y
 - Radial velocity measurements not possible because WD spectrum is featureless
 - Thermal flux from planet constrained to less than 6.1% of WD's thermal flux by comparing optical and infrared spectra

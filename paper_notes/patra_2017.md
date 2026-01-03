@@ -1,5 +1,4 @@
 # The Apparently Decaying Orbit of WASP-12b
-
 - Paper link: https://arxiv.org/pdf/1703.06582
 - Most hot Jupiters should be undergoing orbital decay because star's rotational angular momentum is generally too small in comparison to orbital angular momentum for tidal evolution to reach stable equilibrium
 - Hot Jupiters with sufficiently eccentric orbits should undergo apsidal precession
