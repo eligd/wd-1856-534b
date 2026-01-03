@@ -8,7 +8,7 @@
 - Perform aperture photometry on MIRI data and subtract expected WD flux to compute planet's flux excess
 - Flux excess observed at 12.8, 15, and 18 μm
 - Infrared features in WD spectrum not seen in NIRSpec data and thus not expected in MIRI data
-- Alternative explanations for observed IR excess (debris disk, cmpanions, spatially unresolved background source) all considered unlikely
+- Alternative explanations for observed IR excess (debris disk, companions, spatially unresolved background source) all considered unlikely
 - Estimate blackbody temperature of planet as $186^{+6}_{-7}$ K
 - Can also use JWST data for atmospheric modeling and compute planet temperature from there, but due to limited quantity of data so far the atmospheric modeling does not offer a significant advantage over the blackbody model
 - Estimate planet's mass as $5.2^{+0.7}_{-0.8}$ Jupiter masses from temperature of planet and age of system, which confirms WD 1856+534 b is an exoplanet rather than a brown dwarf

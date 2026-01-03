@@ -83,6 +83,3 @@ We observed 19 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 <div style="text-align: center;">
     <img src="imgs/tess_exp_120s.png" alt="Spreadsheet Columns" width="600"/>
 </div>
-
-## Literature Review
-- Notes from papers on WD 1856+534 b can be found in the `paper_notes` directory

@@ -43,8 +43,8 @@ def plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred, uncertainty, save
     axs[0].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-t_const_P_obs[0:-20])*24*60, color='#dbb6b6', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
     axs[1].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-tt[0:-20])*24*60, color='lightsteelblue', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
 
-    axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkred', yerr=uncertainty[-20:]*24*60, linestyle='', marker='.', markersize=10, label='Observed (This Work)', zorder=2)
-    axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='.', markersize=10, label='Observed (This Work)', zorder=2)
+    axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkred', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
+    axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
 
     labels = ['Constant Period', 'Companion Model']
     for ax, label in zip(axs, labels):
@@ -58,6 +58,75 @@ def plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred, uncertainty, save
         ax.legend(loc='upper right', fontsize=leg_size, framealpha=1)
 
     plt.savefig(savepath, format='pdf', bbox_inches='tight');
+
+def plot_transit_times_new(t_obs, epochs_obs, t_pred, epochs_pred, t_p_res, epochs_pred_res, uncertainty, savepath):
+    fig, axs = plt.subplots(3, 1, figsize=(12, 12), gridspec_kw={'height_ratios': [2, 2, 1]}, sharex=True)
+    plt.subplots_adjust(hspace=0.1)
+    fontsize = 14
+    leg_size = 13
+
+    for ax in axs:
+        ax.minorticks_on()
+        ax.tick_params(axis='both', labelsize=12)
+        ax.tick_params(direction='in', which='minor', length=5, bottom=True, top=True, left=True, right=True)
+        ax.tick_params(direction='in', which='major', length=10, bottom=True, top=True, left=True, right=True)
+
+    def linear_model(x, m, b):
+        return m * x + b
+
+    popt_obs, _ = curve_fit(linear_model, epochs_obs, t_obs, sigma=uncertainty, absolute_sigma=True)
+
+    m_obs, b_obs = popt_obs
+
+    t_const_P_obs = m_obs * epochs_obs + b_obs
+    t_const_P_obs_interpolated = m_obs * epochs_pred_res + b_obs
+
+    tt = []
+    for epoch in epochs_obs:
+        idx = np.where(epochs_pred == epoch)[0]
+        if idx.size != 0:
+            tt.append(t_pred[idx[0]])
+    tt = np.array(tt)
+
+    #tt_interpolated = []
+    #for epoch in epochs_pred_res:
+    #    idx = np.where(epochs_pred_res == epoch)[0]
+    #    if idx.size != 0:
+    #        tt_interpolated.append(t_pred[idx[0]])
+    tt_interpolated = np.array(t_p_res)
+
+    axs[0].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-t_const_P_obs[0:-20])*24*60, color='#dbb6b6', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
+    axs[1].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-tt[0:-20])*24*60, color='lightsteelblue', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
+
+    axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkred', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
+    axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
+    #axs[1].plot(epochs_pred_res, (t_const_P_obs_interpolated - tt_interpolated)*24*60, linestyle='--', marker='', color='red', markersize=2, label='Constant Period')
+
+    #axs[2].plot(epochs_pred_res, (t_const_P_obs_interpolated - tt_interpolated)*24*60, linestyle='', marker='.', color='black', markersize=2)
+    axs[2].plot(epochs_obs, (t_const_P_obs - tt)*24*60, linestyle='', marker='.', color='black', markersize=4)
+    axs[2].set_ylim(-0.55/60, 1.25/60)
+    axs[2].set_ylabel('Constant Period Minus\nCompanion [min]', fontsize=fontsize)
+    #axs[2].plot(epochs_obs, (t_const_P_obs - tt)*24*60, color='pink', marker='.', linestyle='')
+
+    labels = ['Constant Period', 'Companion Model']
+    for ax, label in zip(axs, labels):
+        xmin, xmax = ax.get_xlim()
+        ax.plot([xmin, xmax], [0, 0], color='black', linewidth=2, label=label, zorder=1)
+        ax.set_ylim(-0.5, 0.5)
+
+        #ax.set_xlabel('Epoch Number', fontsize=fontsize)
+        ax.set_ylabel('Transit Timing Variation [min]', fontsize=fontsize)
+
+        ax.legend(loc='upper right', fontsize=leg_size, framealpha=1)
+    axs[2].set_xlabel('Epoch Number', fontsize=fontsize)
+
+    fig.align_ylabels()
+
+    plt.savefig(savepath, format='pdf', bbox_inches='tight');
+
+    # y label
+    # normalization
+    # legend (if needed)
 
 def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.29013566804598, title=None, log=False, eccentric=False):
     fig, ax = plt.subplots(figsize=(15, 8))
@@ -79,21 +148,25 @@ def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.29013566804598, t
 
     if log:
         ax.set_yscale('log')
-        im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
-    else: 
-        im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
+    #    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
+    #else: 
+    #    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
 
     #im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
-    #im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.00381835*1047.57, 400, 50], vmin=-4, vmax=4)
+    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.00381835*1047.57, 400, 50], vmin=-4, vmax=4)
     ax.set_aspect('auto')
     ax.set_xlabel('Mass [Jupiter masses]', fontsize=fontsize)
     ax.set_ylabel('Period [days]', fontsize=fontsize)
 
     cbar = plt.colorbar(im, ax=ax)
     cbar.set_label('Log Base 10 Likelihood Ratio', rotation=90, labelpad=15, fontsize=18)
+    cbar.ax.tick_params(labelsize=14)
 
     dashed_box = Rectangle((0.000003*1047.57, 50), (0.00381835-0.000003)*1047.57, 350, fill=False, edgecolor='black', linestyle='--', linewidth=2)
-    ax.add_patch(dashed_box)
+    #ax.add_patch(dashed_box)
+
+    ax.tick_params(axis='both', which='major', bottom=True, top=True, right=True, left=True, direction='in', length=12, width=1, labelsize=14)
+    ax.tick_params(axis='both', which='minor', bottom=True, top=True, right=True, left=True, direction='in', length=6, width=1, labelsize=14)
 
     if title is not None:
         plt.title(title, fontsize=title_size, y=1.02)
@@ -176,13 +249,24 @@ def plot_2d_density(flat_samples, savepath):
     density = kde(data)
 
     fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-    ax.scatter(masses, periods, s=4, c=density, cmap='magma', alpha=0.5)
+    scaled_density = (density - density.min()) / (density.max() - density.min())
+    cm = ax.scatter(masses, periods, s=4, c=scaled_density, cmap='magma')
+    cm.set_alpha(0.5)
 
     xx, yy = np.mgrid[masses.min():masses.max():200j, periods.min():periods.max():200j]
     positions = np.vstack([xx.ravel(), yy.ravel()])
     zz = kde(positions)
     zz = zz.reshape(xx.shape)
     cs = ax.contour(xx, yy, zz, levels=[zz.max()*0.5, zz.max()*0.6, zz.max()*0.7, zz.max()*0.8, zz.max()*0.9], colors='black')
+
+    norm = plt.Normalize(vmin=scaled_density.min(), vmax=scaled_density.max())
+    cbar = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=plt.get_cmap('magma')), ax=ax, pad=0.02)
+    cbar.set_label('Normalized Density', rotation=90, labelpad=7, fontsize=20)
+    cbar.ax.tick_params(labelsize=12)
+
+    # normalize
+    # label
+    # update overleaf
 
     ax.set_xlabel('Mass [Jupiter masses]', fontsize=20)
     ax.set_ylabel('Period [days]', fontsize=20)
@@ -197,18 +281,18 @@ def plot_2d_density(flat_samples, savepath):
     plt.savefig(savepath, format='pdf', bbox_inches='tight')
 
 if __name__ == '__main__':
-    #chi2_arr = np.load('arrays/chi2_new_log.npy') #chi2_zoom_log.npy')
-    #savepath = 'plots/likelihood_ratios_new_log.pdf' #zoom_log.pdf'
+    #chi2_arr = np.load('arrays/chi2_zoom_log.npy') #chi2_zoom_log.npy')
+    #savepath = 'plots/likelihood_ratios_zoom_log.pdf' #zoom_log.pdf'
     #plot_likelihood_ratio(chi2_arr, savepath, log=True, eccentric=False)
 
-    import pandas as pd
-    df = pd.read_csv('/Users/eligendreaudistler/Desktop/wd-1856-534b/all_times.csv')
-    t_obs = df['T_mid'].to_numpy()
-    plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred)
+    #import pandas as pd
+    #df = pd.read_csv('/Users/eligendreaudistler/Desktop/wd-1856-534b/all_times.csv')
+    #t_obs = df['T_mid'].to_numpy()
+    #plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred)
 
     #savepath = 'plots/delta_bic.pdf'
     #plot_delta_bic(chi2_arr, savepath)
 
-    #flat_samples = np.load('arrays/flat_samples.npy')
-    #flat_samples[:,0] *= 1047.57
-    #plot_2d_density(flat_samples, 'mcmc_plots/mcmc_density.pdf')
+    flat_samples = np.load('arrays/flat_samples.npy')
+    flat_samples[:,0] *= 1047.57
+    plot_2d_density(flat_samples, 'mcmc_plots/mcmc_density.pdf')

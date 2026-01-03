@@ -141,9 +141,18 @@ if __name__ == '__main__':
     offset = t_obs[ref_idx] - t_p[ref_idx]
     t_p += offset
 
-    savepath = 'plots/o-c_new_zoom.pdf'
+    # for residual panel
+    t_p_copy = np.array(t_pred)
+    R = romer_delay(p1_period, p2_periods[period_idx], p1_mass, p2_masses[mass_idx], stellar_mass, p1_inclination, ref_transit, t_p_copy)
+    t_p_copy += R
+
+    ref_idx = np.where(epochs_obs==get_epoch(ref_transit))[0][0]
+    offset = t_obs[ref_idx] - t_p_copy[ref_idx]
+    t_p_copy += offset
+
+    savepath = 'plots/o-c_new_zoom_res.pdf'
     print("Mass: ", p2_masses[mass_idx])
     print("Period: ", p2_periods[period_idx])
     print("Mean anomaly: ", p2_mean_anomalies[mean_anomaly_idx])
     print("Min chi2: ", np.min(chi2_arr))
-    plot_transit_times(t_obs, epochs_obs, t_p, get_epoch(t_p), t_obs_err, savepath)
+    plot_transit_times_new(t_obs, epochs_obs, t_p, get_epoch(t_p), t_p_copy, get_epoch(t_p_copy), t_obs_err, savepath)
