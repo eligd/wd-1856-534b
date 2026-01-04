@@ -79,7 +79,6 @@ def plot_transit_times_new(t_obs, epochs_obs, t_pred, epochs_pred, t_p_res, epoc
     m_obs, b_obs = popt_obs
 
     t_const_P_obs = m_obs * epochs_obs + b_obs
-    t_const_P_obs_interpolated = m_obs * epochs_pred_res + b_obs
 
     tt = []
     for epoch in epochs_obs:
@@ -88,25 +87,15 @@ def plot_transit_times_new(t_obs, epochs_obs, t_pred, epochs_pred, t_p_res, epoc
             tt.append(t_pred[idx[0]])
     tt = np.array(tt)
 
-    #tt_interpolated = []
-    #for epoch in epochs_pred_res:
-    #    idx = np.where(epochs_pred_res == epoch)[0]
-    #    if idx.size != 0:
-    #        tt_interpolated.append(t_pred[idx[0]])
-    tt_interpolated = np.array(t_p_res)
-
     axs[0].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-t_const_P_obs[0:-20])*24*60, color='#dbb6b6', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
     axs[1].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-tt[0:-20])*24*60, color='lightsteelblue', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
 
     axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkred', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
     axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
-    #axs[1].plot(epochs_pred_res, (t_const_P_obs_interpolated - tt_interpolated)*24*60, linestyle='--', marker='', color='red', markersize=2, label='Constant Period')
 
-    #axs[2].plot(epochs_pred_res, (t_const_P_obs_interpolated - tt_interpolated)*24*60, linestyle='', marker='.', color='black', markersize=2)
     axs[2].plot(epochs_obs, (t_const_P_obs - tt)*24*60, linestyle='', marker='.', color='black', markersize=4)
     axs[2].set_ylim(-0.55/60, 1.25/60)
     axs[2].set_ylabel('Constant Period Minus\nCompanion [min]', fontsize=fontsize)
-    #axs[2].plot(epochs_obs, (t_const_P_obs - tt)*24*60, color='pink', marker='.', linestyle='')
 
     labels = ['Constant Period', 'Companion Model']
     for ax, label in zip(axs, labels):
@@ -114,7 +103,6 @@ def plot_transit_times_new(t_obs, epochs_obs, t_pred, epochs_pred, t_p_res, epoc
         ax.plot([xmin, xmax], [0, 0], color='black', linewidth=2, label=label, zorder=1)
         ax.set_ylim(-0.5, 0.5)
 
-        #ax.set_xlabel('Epoch Number', fontsize=fontsize)
         ax.set_ylabel('Transit Timing Variation [min]', fontsize=fontsize)
 
         ax.legend(loc='upper right', fontsize=leg_size, framealpha=1)
@@ -124,16 +112,11 @@ def plot_transit_times_new(t_obs, epochs_obs, t_pred, epochs_pred, t_p_res, epoc
 
     plt.savefig(savepath, format='pdf', bbox_inches='tight');
 
-    # y label
-    # normalization
-    # legend (if needed)
-
 def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.29013566804598, title=None, log=False, eccentric=False):
     fig, ax = plt.subplots(figsize=(15, 8))
     fontsize = 20
     title_size = 25
 
-    #const_P_chi2 = 92.56439191559153
     likelihood_ratio_log_base_e = - (chi2_arr - const_P_chi2) / 2
     likelihood_ratio_log_base_10 = likelihood_ratio_log_base_e * np.log10(np.e)
     if eccentric:
@@ -148,12 +131,12 @@ def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.29013566804598, t
 
     if log:
         ax.set_yscale('log')
-    #    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
-    #else: 
-    #    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
 
-    #im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
-    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.00381835*1047.57, 400, 50], vmin=-4, vmax=4)
+    im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.0124*1047.57, 1500, 50], vmin=-4, vmax=4)
+    
+    # for zoomed version
+    #im = ax.imshow(likelihood_ratio.T, extent=[0.000003*1047.57, 0.00381835*1047.57, 400, 50], vmin=-4, vmax=4)
+    
     ax.set_aspect('auto')
     ax.set_xlabel('Mass [Jupiter masses]', fontsize=fontsize)
     ax.set_ylabel('Period [days]', fontsize=fontsize)
@@ -162,7 +145,7 @@ def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.29013566804598, t
     cbar.set_label('Log Base 10 Likelihood Ratio', rotation=90, labelpad=15, fontsize=18)
     cbar.ax.tick_params(labelsize=14)
 
-    dashed_box = Rectangle((0.000003*1047.57, 50), (0.00381835-0.000003)*1047.57, 350, fill=False, edgecolor='black', linestyle='--', linewidth=2)
+    #dashed_box = Rectangle((0.000003*1047.57, 50), (0.00381835-0.000003)*1047.57, 350, fill=False, edgecolor='black', linestyle='--', linewidth=2)
     #ax.add_patch(dashed_box)
 
     ax.tick_params(axis='both', which='major', bottom=True, top=True, right=True, left=True, direction='in', length=12, width=1, labelsize=14)
@@ -200,6 +183,7 @@ def plot_delta_bic(chi2_arr, savepath, const_P_chi2=103.44948907084853, title=No
     ax.plot([2.3, 2.3], [1000, 100])
     ax.plot([0, 14], [700, 700])
 
+    # for zoomed version
     #im = ax.imshow(delta_bic.T, extent=[0.000003*1047.57, 0.00381835*1047.57, 400, 50], vmin=-100, vmax=-5)
 
     ax.set_aspect('auto')
@@ -263,10 +247,6 @@ def plot_2d_density(flat_samples, savepath):
     cbar = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=plt.get_cmap('magma')), ax=ax, pad=0.02)
     cbar.set_label('Normalized Density', rotation=90, labelpad=7, fontsize=20)
     cbar.ax.tick_params(labelsize=12)
-
-    # normalize
-    # label
-    # update overleaf
 
     ax.set_xlabel('Mass [Jupiter masses]', fontsize=20)
     ax.set_ylabel('Period [days]', fontsize=20)

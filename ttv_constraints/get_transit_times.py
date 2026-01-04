@@ -150,7 +150,7 @@ if __name__ == '__main__':
     offset = t_obs[ref_idx] - t_p_copy[ref_idx]
     t_p_copy += offset
 
-    savepath = 'plots/o-c_new_zoom_res.pdf'
+    savepath = 'plots/o-c_new_zoom_res_test.pdf'
     print("Mass: ", p2_masses[mass_idx])
     print("Period: ", p2_periods[period_idx])
     print("Mean anomaly: ", p2_mean_anomalies[mean_anomaly_idx])
