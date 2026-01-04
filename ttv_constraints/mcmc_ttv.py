@@ -118,7 +118,7 @@ offset = t_obs[ref_idx] - t_p[ref_idx]
 t_p += offset
 
 # plot initial O-C curve
-savepath = 'mcmc_plots/initial_o-c.pdf'
+savepath = 'plots/mcmc_plots/initial_o-c.pdf'
 plot_transit_times(t_obs, epochs_obs, t_p, get_epoch(t_p), t_obs_err, savepath)
 
 # likelihood function for Gaussian distribution with variance underestimated by fractional amount f
@@ -182,7 +182,7 @@ ref_idx = np.where(epochs_obs==get_epoch(ref_transit))[0][0]
 offset = t_obs[ref_idx] - t_p[ref_idx]
 t_p += offset
 
-savepath = 'mcmc_plots/ml_o-c.pdf'
+savepath = 'plots/mcmc_plots/ml_o-c.pdf'
 plot_transit_times(t_obs, epochs_obs, t_p, get_epoch(t_p), t_obs_err, savepath)
 
 # define uniform priors on all parameters
@@ -212,9 +212,9 @@ sampler = emcee.EnsembleSampler(nwalkers, ndim, log_probability, args=(epochs_ob
 sampler.run_mcmc(pos, 5_000, progress=True);
 
 # plot results
-savepath = 'mcmc_plots/trace_plots.pdf'
+savepath = 'plots/mcmc_plots/trace_plots.pdf'
 trace_plots(sampler, savepath)
-savepath = 'mcmc_plots/corner_plots.pdf'
+savepath = 'plots/mcmc_plots/corner_plots.pdf'
 corner_plots(sampler, theta_ml, savepath)
 
 # compute parameters to cite
@@ -248,7 +248,7 @@ ref_idx = np.where(epochs_obs==get_epoch(ref_transit))[0][0]
 offset = t_obs[ref_idx] - t_p[ref_idx]
 t_p += offset
 
-savepath = 'mcmc_plots/mcmc_o-c.pdf'
+savepath = 'plots/mcmc_plots/mcmc_o-c.pdf'
 plot_transit_times(t_obs, epochs_obs, t_p, get_epoch(t_p), t_obs_err, savepath)
 
 np.save('arrays/theta_mcmc.npy', theta_mcmc)
