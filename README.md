@@ -26,7 +26,7 @@ We observed 20 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 
 ## Data Reduction Procedure
 - Download flats, biases, and science data from Mount Hamilton data repository (https://mthamilton.ucolick.org/data/)
-- Correct FITS file headers with fits_head.py to ensure files are readable by AstroImageJ (AIJ)
+- Correct FITS file headers with `fits_head.py` to ensure files are readable by AstroImageJ (AIJ)
 - Import science image sequence to AIJ and flip through to make sure there are no obvious problems. Go to Process $\to$ Data reduction facility. In DP Coordinate Converter, update the object ID and observatory ID, and check that the RA and DEC coordinates look right. Then make the CCD Data Processor window look like this and click start:
 <div style="text-align: center;">
     <img src="imgs/ccd_data_processor.png" alt="CCD Data Processor" width="600"/>
@@ -50,10 +50,10 @@ We observed 20 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
     <img src="imgs/spreadsheet_cols.png" alt="Spreadsheet Columns" width="400"/>
 </div>
 
-## Light Curve Fitting (individual transits)
-- preprocess.ipynb: load data, plot raw lightcurves, remove outliers, and normalize
-- fit_lightcurves/fit_lightcurve_{date}.ipynb: fit individual lightcurve with MCMC
-- fit_lightcurves/fit_combined_lightcurve.ipynb: fit combined lightcurve (including all 19 transits, see below)
+## Light Curve Fitting
+- `preprocess.ipynb`: load data, plot raw lightcurves, remove outliers, and normalize
+- `fit_lightcurves/fit_lightcurve_{date}.ipynb`: fit individual lightcurve with MCMC
+- `fit_lightcurves/fit_combined_lightcurve.ipynb`: fit combined lightcurve (including all 20 transits, see below)
 <div style="text-align: center;">
     <img src="imgs/combined_lightcurve.png" alt="Spreadsheet Columns" width="400"/>
 </div>
