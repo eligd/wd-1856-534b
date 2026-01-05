@@ -1,7 +1,7 @@
 # TTV constraints
 
 ## Code
-- `grid_search.py`: perform grid search in 3D phase space of period, mass, and mean anomaly; saves $\chi^2$ for each set of parameter values
+- `grid_search.py`: perform grid search in 3D phase space of period, mass, and mean anomaly; save $\chi^2$ for each set of parameter values
 - `get_transit_times.py`: compute and plot transit times using best hypothetical companion from previous run of `grid_search.py`
 - `mcmc_ttv.py`: TTV constraints with MCMC exploring full 7D phase space
     - Yields poor constraints, but still useful for checking if 3D grid search is missing promising regions of 7D phase space
