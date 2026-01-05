@@ -1,10 +1,12 @@
 # TESS Data
 
 ## Code
-- `tess_lightcurve_exp_20.ipynb` and `tess_lightcurve_exp_120.ipynb`: examples of TESS data with 20 and 120 second exposure times with expected transit times overplotted; the data are very noisy (which makes sense given that the WD is much fainter than the targets TESS is designed for), but the transits are evident in at least the 120 second exposures (see below)
-- `phase_folded_lightcurve.ipynb`: plot phase-folded TESS light curves using all TESS data available with 120 second exposures; still too much noise to fit a light curve to the data with reasonable accuracy (even after averaging neighboring points)
+- `tess_lightcurve_exp_20.ipynb` and `tess_lightcurve_exp_120.ipynb`: examples of TESS data (20 and 120 second exposure times) with expected transit times overplotted
+    - Data are very noisy, which makes sense given that the WD is much fainter than the targets TESS is designed for
+    - Nonetheless, transits are evident in at least the 120 second exposures (see below)
+- `phase_folded_lightcurve.ipynb`: phase-folded TESS light curves using all TESS data available with 120 second exposures
 <div style="text-align: center;">
-    <img src="../imgs/tess_exp_120s.png" alt="Phase-folded TESS light curve" width="600"/>
+    <img src="../imgs/tess_exp_120s.png" alt="TESS light curve with 120s exposures" width="600"/>
 </div>
 
 ## Background
