@@ -2,23 +2,12 @@
 
 ## Code
 - `grid_search.py`: perform grid search in 3D phase space of period, mass, and mean anomaly; save $\chi^2$ for each set of parameter values
-- `get_transit_times.py`: compute and plot transit times using best hypothetical companion from previous run of `grid_search.py`
-- `mcmc_ttv.py`: TTV constraints with MCMC exploring full 7D phase space
+- `get_transit_times.py`: compute and plot transit times using best hypothetical companion from prior run of `grid_search.py`
+- `mcmc_ttv.py`: TTV constraints exploring full 7D phase space with MCMC
     - Yields poor constraints, but still useful for checking if 3D grid search is missing promising regions of 7D phase space
 - `utils.py`: utility functions, currently only for implementing Rømer delay correction (see below)
 - `utils_plot.py`: plotting functions
-- Sample configuration files stored in `config_files` directory
-
-## Instructions
-Start by setting parameters in config file. Then run grid search with the command
-
-`python grid_search.py --config_file <config_name>.yml`
-
-where `<config_name>` is replaced by the name of the configuration file. After the grid search is complete, plot the transit timing residuals with
-
-`python get_transit_times.py --config_file <config_name>.yml`
-
-using the *same* config file.
+- `config_files`: directory for sample configuration files
 
 ## Inputs (set in config file)
 - Filepath of csv containing observed transit times
@@ -42,6 +31,17 @@ using the *same* config file.
 - Integration time step
 - Integration start epoch
 - Integration duration
+
+## Instructions
+Start by setting parameters in config file. Then run grid search with the command
+
+`python grid_search.py --config_file <config_name>.yml`
+
+where `<config_name>` is replaced by the name of the configuration file. After the grid search is complete, plot the transit timing residuals with
+
+`python get_transit_times.py --config_file <config_name>.yml`
+
+using the *same* config file.
 
 ## Current approach; based on Kubiak et al. (2023)
 - Include WD 1856+534 b mass in stellar mass (rather than planet mass) following Kubiak et al. (2023)
