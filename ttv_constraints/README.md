@@ -1,5 +1,26 @@
 # TTV constraints
-## Inputs (set in config.yml)
+
+## Code
+- `grid_search.py`: perform grid search in 3D phase space of period, mass, and mean anomaly; saves $\chi^2$ for each set of parameter values
+- `get_transit_times.py`: compute and plot transit times using best hypothetical companion from previous run of `grid_search.py`
+- `mcmc_ttv.py`: TTV constraints with MCMC exploring full 7D phase space
+    - Yields poor constraints, but still useful for checking if 3D grid search is missing promising regions of 7D phase space
+- `utils.py`: utility functions, currently only for implementing Rømer delay correction (see below)
+- `utils_plot.py`: plotting functions
+- Sample configuration files stored in `config_files` directory
+
+## Instructions
+Start by setting parameters in config file. Then run grid search with the command
+
+`python grid_search.py --config_file <config_name>.yml`
+
+where `<config_name>` is replaced by the name of the configuration file. After the grid search is complete, plot the transit timing residuals with
+
+`python get_transit_times.py --config_file <config_name>.yml`
+
+using the *same* config file.
+
+## Inputs (set in config file)
 - Filepath of csv containing observed transit times
 - $\text{BJD}_{\text{TDB}}$ of reference transit
 - Universal gravitational constant
@@ -22,13 +43,13 @@
 - Integration start epoch
 - Integration duration
 
-## Current approach
+## Current approach; based on Kubiak et al. (2023)
 - Include WD 1856+534 b mass in stellar mass (rather than planet mass) following Kubiak et al. (2023)
     - Kubiak et al. (2023) use $10M_J$ planetary mass, whereas I used $5.2M_J$ based on results of Limbach et al. (2025)
 - WD 1856+534 b period set to best fit value obtained by fitting constant period model to observed transit times
 - WD 1856+534 b inclination set to value from discovery paper Vanderburg et al. (2020)
 - WD 1856+534 b eccentricity set to 0
-- WD 1856+%34 b longitude of ascending node set to 0 (defines reference plane)
+- WD 1856+534 b longitude of ascending node set to 0 (defines reference plane)
 - WD 1856+534 b argument of periastron set to 0 (this parameter has no physical meaning when $e=0$, but needs to be set for ttvfast to run)
 - WD 1856+534 b mean anomaly initialized to 0
 - Start by considering only one additional outer planet
@@ -43,7 +64,6 @@ $$\chi^2 = \sum_i\frac{(y_i-m_i)^2}{\sigma_i^2}$$
 - Likelihood ratio plot:
     - Collapse grid along mean anomaly axis by choosing value of mean anomaly that leads to highest likelihood for each combination of outer planet mass and period
     - Heatmaps show log base 10 of ratio of likelihood with hypothetical outer planet to likelihood under constant period model
-    - Currently the likelihood ratios seem too large, still trying to understand what might be wrong here...
 
 ## Rømer delay correction
 - Based on Equations 6 and 7 of https://arxiv.org/abs/1302.0563
