@@ -1,7 +1,7 @@
 # WD 1856+534 b
 
 ## Nickel Data
-We observed 19 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. 
+We observed 20 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. 
 
 - April 1, 2022
 - June 2, 2022
@@ -22,6 +22,7 @@ We observed 19 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 - June 7, 2025
 - June 17, 2025
 - July 1, 2025
+- July 18, 2025
 
 ## Data Reduction Procedure
 - Download flats, biases, and science data from Mount Hamilton data repository (https://mthamilton.ucolick.org/data/)
@@ -61,25 +62,8 @@ We observed 19 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 - Fit linear and quadratic orbital decay models and calculate relevant statistics (chi-squared, BIC)
 - No evidence for orbital decay found (i.e., no advantage to using quadratic model over linear model)
 
-## JWST Spectra
-- MAST lists three proposals for observing the WD with JWST, of which only one (https://www.stsci.edu/jwst/phase2-public/2358.pdf) has publicly available science data
-    - This proposal looks promising because it uses the NIRSpec Bright Object Time Series observing template, which is designed for spectroscopic observations of exoplanet transits
-    - I started to look into how to use the JWST Pipeline to extract spectra from the FITS files, but have not been successful yet because all of the files are tagged with the NRS_WATA exposure type, which suggests they are target acquisition images rather than the actual spectra
-    - I went through all the files for each of the three nights for which we have data and can't seem to find the NIRSpec Bright Object Time Series spectra anywhere
-    - I eventually found a note in the proposal overview about some of the early observations being rescheduled because they failed target acquisition and there are some future observations listed on MAST, but all the existing data is from 2022 so it seems a little strange that there wouldn’t be any spectra yet
-    - Limbach et al. 2025 use JWST results from this proposal for their WD spectral energy distribution modeling, but perhaps the rescheduled observations are not publicly available yet?
-- MIRI observations from Limbach et al. 2025 paper (https://arxiv.org/abs/2504.16982) will become publicly available on July 29, 2025
+## Transit Timing Variations
+- See README in `ttv_constraints` directory
 
-## TESS Lightcurves
-- TESS Input Catalog (TIC) ID: 267574918.01
-- TESS Object of Interest (TOI): 1690.01
-- 74 observations available on MAST: 
-    - 23 Full Frame Images (FFI), 30 minute cadence
-        - 5 with 24 minute exposure time, 6 with 8 minute exposure time, 12 with 2.6 minute exposure time
-    - 51 TOI observations
-        - 33 with 2 minute exposure time, 18 with 20 second exposure time
-- I plotted examples of TESS data with 20 and 120 second exposure times against expected transit times; the data are very noisy (which makes sense given that the WD is much fainter than the targets TESS is designed for), but the transits are evident in at least the 120 second exposures (see below)
-- I also produced a phase-folded light curve using all the TESS data available with 120 second exposures, but there is still too much noise to fit a light curve to the data with reasonable accuracy (even after averaging neighboring points)
-<div style="text-align: center;">
-    <img src="imgs/tess_exp_120s.png" alt="Spreadsheet Columns" width="600"/>
-</div>
+## TESS Data
+- See README in `tess` directory
