@@ -58,9 +58,11 @@ We observed 20 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
     <img src="imgs/combined_lightcurve.png" alt="Spreadsheet Columns" width="400"/>
 </div>
 
-## Orbital Decay Model
-- Fit linear and quadratic orbital decay models and calculate relevant statistics (chi-squared, BIC)
-- No evidence for orbital decay found (i.e., no advantage to using quadratic model over linear model)
+## Orbital Change
+- `linear.ipynb` and `quadratic.ipynb`: fit linear and quadratic orbital growth/decay models and calculate relevant statistics (chi-squared, BIC)
+    - No evidence for orbital growth/decay found (i.e., no advantage to using quadratic model over linear model)
+- `apsidal_precession.ipynb`: fit apsidal precession model with MCMC
+    - Find $e=0$ scenario strongly preferred (i.e., no evidence for residual eccentricity)
 
 ## Transit Timing Variations
 - See README in `ttv_constraints` directory
