@@ -7,7 +7,7 @@
     <img src="../imgs/tess_exp_120s.png" alt="Phase-folded TESS light curve" width="600"/>
 </div>
 
-## Identifiers
+## Background
 - TESS Input Catalog (TIC) ID: 267574918.01
 - TESS Object of Interest (TOI): 1690.01
 - 74 observations available on MAST: 
