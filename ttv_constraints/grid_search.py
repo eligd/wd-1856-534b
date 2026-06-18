@@ -152,6 +152,11 @@ popt, _ = curve_fit(linear_model, epochs_obs, t_obs, sigma=t_obs_err, absolute_s
 m, b = popt
 obs_ttv = t_obs - (m * epochs_obs + b)
 
+# shuffle (for striation test)
+#np.random.seed(42)
+#indices = np.random.permutation(len(obs_ttv))
+#obs_ttv = obs_ttv[indices]
+#t_obs_err = t_obs_err[indices]
 
 if __name__ == '__main__':
     print('Constant period model chi2: ', get_chi2(obs_ttv, np.zeros_like(obs_ttv), t_obs_err))
