@@ -1,28 +1,28 @@
 # WD 1856+534 b
 
 ## Nickel Data
-We observed 20 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. 
+We observed 20 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. The dates listed below correspond to the morning *after* the observations (rather than the evening before).
 
-- April 1, 2022
-- June 2, 2022
-- July 31, 2023
-- August 14, 2023
-- May 13, 2024
-- June 6, 2024
-- June 13, 2024
-- June 23, 2024
-- June 30, 2024
-- July 7, 2024
-- July 14, 2024
-- July 24, 2024
-- August 7, 2024
-- August 14, 2024
-- May 17, 2025
-- May 24, 2025
-- June 7, 2025
-- June 17, 2025
-- July 1, 2025
-- July 18, 2025
+- April 2, 2022
+- June 3, 2022
+- August 1, 2023
+- August 15, 2023
+- May 14, 2024
+- June 7, 2024
+- June 14, 2024
+- June 24, 2024
+- July 1, 2024
+- July 8, 2024
+- July 15, 2024
+- July 25, 2024
+- August 8, 2024
+- August 15, 2024
+- May 18, 2025
+- May 25, 2025
+- June 8, 2025
+- June 18, 2025
+- July 2, 2025
+- July 19, 2025
 
 ## Data Reduction Procedure
 - Download flats, biases, and science data from Mount Hamilton data repository (https://mthamilton.ucolick.org/data/)
@@ -61,6 +61,7 @@ We observed 20 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Obs
 ## Orbital Change
 - `linear.ipynb` and `quadratic.ipynb`: fit linear and quadratic orbital growth/decay models and calculate relevant statistics (chi-squared, BIC)
     - No evidence for orbital growth/decay found (i.e., no advantage to using quadratic model over linear model)
+- `linear_tess.ipynb` and `quadratic_tess.ipynb`: same as above, but also including TESS data
 - `apsidal_precession.ipynb`: fit apsidal precession model with MCMC
     - Find $e=0$ scenario strongly preferred (i.e., no evidence for residual eccentricity)
 
