@@ -1,7 +1,7 @@
 # WD 1856+534 b
 
 ## Nickel Data
-We observed 20 transits of WD 1856+534b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. The dates listed below correspond to the morning *after* the observations (rather than the evening before).
+We observed 20 transits of WD 1856+534 b with the 1m Nickel Telescope at Lick Observatory on the following dates. All transits were observed in the R band with 45 second exposures except the 2022-04-01 transit, which was taken in the V band with 45 second exposures, and the 2022-06-02 transit, which was taken in the R band with 120 second exposures. The dates listed below correspond to the morning *after* the observations (rather than the evening before).
 
 - April 2, 2022
 - June 3, 2022
