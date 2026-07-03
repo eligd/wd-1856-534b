@@ -70,3 +70,7 @@ We observed 20 transits of WD 1856+534 b with the 1m Nickel telescope at Lick Ob
 
 ## TESS Data
 - See README in `tess` directory
+
+## CSV Files
+- `all_times.csv`: transits from the literature and our Nickel observations
+- `all_times_combined.csv`: transits from the literature, our Nickel observations, and TESS
