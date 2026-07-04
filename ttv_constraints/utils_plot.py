@@ -60,6 +60,75 @@ def plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred, uncertainty, save
 
     plt.savefig(savepath, format='pdf', bbox_inches='tight');
 
+def plot_transit_times_tess(t_obs, epochs_obs, t_pred, epochs_pred, t_3, epochs_3, t_p_3, epochs_p_3, uncertainty, upper_err_3, lower_err_3, savepath):
+    fig, axs = plt.subplots(2, 1, figsize=(12, 10))
+    plt.subplots_adjust(hspace=0.2)
+    fontsize = 14
+    leg_size = 10.5
+
+    for ax in axs:
+        ax.minorticks_on()
+        ax.tick_params(axis='both', labelsize=12)
+        ax.tick_params(direction='in', which='minor', length=5, bottom=True, top=True, left=True, right=True)
+        ax.tick_params(direction='in', which='major', length=10, bottom=True, top=True, left=True, right=True)
+        ax.ticklabel_format(style='plain')
+
+    def linear_model(x, m, b):
+        return m * x + b
+
+    popt_obs, _ = curve_fit(linear_model, epochs_obs, t_obs, sigma=uncertainty, absolute_sigma=True)
+
+    m_obs, b_obs = popt_obs
+
+    t_const_P_obs = m_obs * epochs_obs + b_obs
+    t_const_P_3 = m_obs * epochs_3 + b_obs
+
+    tt = []
+    for epoch in epochs_obs:
+        idx = np.where(epochs_pred == epoch)[0]
+        if idx.size != 0:
+            tt.append(t_pred[idx[0]])
+    tt = np.array(tt)
+
+    tt_3 = []
+    for epoch in epochs_3:
+        idx = np.where(epochs_p_3 == epoch)[0]
+        if idx.size != 0:
+            tt_3.append(t_p_3[idx[0]])
+    tt_3 = np.array(tt_3)
+
+    axs[0].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-t_const_P_obs[0:-20])*24*60, color='lightsteelblue', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
+    axs[1].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-tt[0:-20])*24*60, color='lightsteelblue', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
+
+    axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
+    axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
+
+    axs[0].errorbar(epochs_3, (t_3-t_const_P_3)*24*60, color='#009E73', yerr=[lower_err_3*24*60, upper_err_3*24*60], linestyle='', marker='s', markersize=4, label='TESS (Naponiello 2025)', zorder=1, alpha=0.25)
+    axs[1].errorbar(epochs_3, (t_3-tt_3)*24*60, color='#009E73', yerr=[lower_err_3*24*60, upper_err_3*24*60], linestyle='', marker='s', markersize=4, label='TESS (Naponiello 2025)', zorder=1, alpha=0.25)
+    
+    labels = ['Constant Period', 'Companion Model']
+    for ax, label in zip(axs, labels):
+        xmin, xmax = ax.get_xlim()
+        ax.plot([xmin, xmax], [0, 0], color='black', linewidth=2, label=label, zorder=1)
+        ax.set_xlim(-100, 1550)
+        ax.set_ylim(-2, 2)
+        ax.set_yscale('asinh')
+        ax.set_yticks([-1, -0.5, -0.1, 0.1, 0.5, 1])
+
+        formatter = ticker.ScalarFormatter()
+        formatter.set_scientific(False)
+        ax.yaxis.set_major_formatter(formatter)
+        ax.yaxis.set_minor_locator(ticker.NullLocator())
+
+        ax.set_xlabel('Epoch Number', fontsize=fontsize)
+        ax.set_ylabel('Transit Timing Variation [min]', fontsize=fontsize)
+
+        ax.legend(loc='upper center', ncol=4, fontsize=leg_size, framealpha=0.8)
+
+        ax.grid(which='both', color='lightgray', linestyle='-', alpha=0.3)
+
+    plt.savefig(savepath, format='pdf', bbox_inches='tight');
+
 def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.29013566804598, title=None, full=True):
     fig, ax = plt.subplots(figsize=(15, 8))
     fontsize = 20
