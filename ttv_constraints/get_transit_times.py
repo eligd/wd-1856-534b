@@ -35,6 +35,25 @@ def get_transit_time_predictions(theta):
     mask = np.logical_and(planet_id == 0, transit_times >= 0)
     return transit_times[mask]
 
+def get_full_results(theta):
+    p2_mass, p2_period, p2_eccentricity, p2_inclination, p2_longnode, \
+    p2_argument, p2_mean_anomaly = theta
+    planet2 = ttvfast.models.Planet(
+        mass = p2_mass,
+        period = p2_period,
+        eccentricity = p2_eccentricity,
+        inclination = p2_inclination,
+        longnode = p2_longnode,
+        argument = p2_argument,
+        mean_anomaly = p2_mean_anomaly
+    )
+
+    planets = [planet1, planet2]
+    start_time = ref_transit + start_epoch * p1_period
+    end_time = start_time + duration
+    results = ttvfast.ttvfast(planets, stellar_mass, start_time, time_step, end_time)
+    return results
+
 def linear_model(x, m, b):
     return m*x + b
 
@@ -99,7 +118,12 @@ p2_masses = np.linspace(p2_mass_min, p2_mass_max, p2_mass_points)
 p2_period_min = config['p2_period_min']
 p2_period_max = config['p2_period_max']
 p2_period_points = config['p2_period_points']
-p2_periods = np.linspace(p2_period_min, p2_period_max, p2_period_points)
+period_log = config['period_log']
+if period_log:
+    p2_periods = np.logspace(np.log10(p2_period_min), np.log10(p2_period_max), p2_period_points)
+    print(p2_periods[0], p2_periods[-1])
+else:
+    p2_periods = np.linspace(p2_period_min, p2_period_max, p2_period_points)
 
 p2_mean_anomaly_min = config['p2_mean_anomaly_min']
 p2_mean_anomaly_max = config['p2_mean_anomaly_max']
@@ -141,18 +165,9 @@ if __name__ == '__main__':
     offset = t_obs[ref_idx] - t_p[ref_idx]
     t_p += offset
 
-    # for residual panel
-    t_p_copy = np.array(t_pred)
-    R = romer_delay(p1_period, p2_periods[period_idx], p1_mass, p2_masses[mass_idx], stellar_mass, p1_inclination, ref_transit, t_p_copy)
-    t_p_copy += R
-
-    ref_idx = np.where(epochs_obs==get_epoch(ref_transit))[0][0]
-    offset = t_obs[ref_idx] - t_p_copy[ref_idx]
-    t_p_copy += offset
-
-    savepath = 'plots/o-c_res.pdf'
+    savepath = 'plots/o-c.pdf'
     print("Mass: ", p2_masses[mass_idx])
     print("Period: ", p2_periods[period_idx])
     print("Mean anomaly: ", p2_mean_anomalies[mean_anomaly_idx])
     print("Min chi2: ", np.min(chi2_arr))
-    plot_transit_times_new(t_obs, epochs_obs, t_p, get_epoch(t_p), t_p_copy, get_epoch(t_p_copy), t_obs_err, savepath)
+    plot_transit_times(t_obs, epochs_obs, t_p, get_epoch(t_p), t_obs_err, savepath)
