@@ -148,15 +148,11 @@ p2_mean_anomaly_max = config['p2_mean_anomaly_max']
 p2_mean_anomaly_points = config['p2_mean_anomaly_points']
 p2_mean_anomalies = np.linspace(p2_mean_anomaly_min, p2_mean_anomaly_max, p2_mean_anomaly_points)
 
-popt, _ = curve_fit(linear_model, epochs_obs, t_obs, sigma=t_obs_err, absolute_sigma=True)
-m, b = popt
+#popt, _ = curve_fit(linear_model, epochs_obs, t_obs, sigma=t_obs_err, absolute_sigma=True)
+#m, b = popt
+m = 2459204.5727248639
+b = 1.4079392114 
 obs_ttv = t_obs - (m * epochs_obs + b)
-
-# shuffle (for striation test)
-#np.random.seed(42)
-#indices = np.random.permutation(len(obs_ttv))
-#obs_ttv = obs_ttv[indices]
-#t_obs_err = t_obs_err[indices]
 
 if __name__ == '__main__':
     print('Constant period model chi2: ', get_chi2(obs_ttv, np.zeros_like(obs_ttv), t_obs_err))
