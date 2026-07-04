@@ -33,7 +33,7 @@
 - Integration duration
 
 ## Instructions
-Start by setting parameters in config file. Then run grid search with the command
+Start by setting parameters in config file. Then run the grid search with the command
 
 `python grid_search.py --config_file <config_name>.yml`
 
@@ -43,14 +43,14 @@ where `<config_name>` is replaced by the name of the configuration file. After t
 
 using the *same* config file.
 
-## Current approach; based on Kubiak et al. (2023)
+## Current approach, based on Kubiak et al. (2023)
 - Include WD 1856+534 b mass in stellar mass (rather than planet mass) following Kubiak et al. (2023)
     - Kubiak et al. (2023) use $10M_J$ planetary mass, whereas I used $5.2M_J$ based on results of Limbach et al. (2025)
 - WD 1856+534 b period set to best fit value obtained by fitting constant period model to observed transit times
 - WD 1856+534 b inclination set to value from discovery paper Vanderburg et al. (2020)
 - WD 1856+534 b eccentricity set to 0
 - WD 1856+534 b longitude of ascending node set to 0 (defines reference plane)
-- WD 1856+534 b argument of periastron set to 0 (this parameter has no physical meaning when $e=0$, but needs to be set for ttvfast to run)
+- WD 1856+534 b argument of periastron set to 0 (this parameter has no physical meaning when $e=0$, but needs to be set for TTVFast to run)
 - WD 1856+534 b mean anomaly initialized to 0
 - Start by considering only one additional outer planet
 - Outer planet's mass, period, eccentricity, inclination, longitude of ascending node, argument of periastron, and mean anomaly are free parameters
