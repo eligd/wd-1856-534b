@@ -148,10 +148,8 @@ p2_mean_anomaly_max = config['p2_mean_anomaly_max']
 p2_mean_anomaly_points = config['p2_mean_anomaly_points']
 p2_mean_anomalies = np.linspace(p2_mean_anomaly_min, p2_mean_anomaly_max, p2_mean_anomaly_points)
 
-#popt, _ = curve_fit(linear_model, epochs_obs, t_obs, sigma=t_obs_err, absolute_sigma=True)
-#m, b = popt
-m = 2459204.5727248639
-b = 1.4079392114 
+popt, _ = curve_fit(linear_model, epochs_obs, t_obs, sigma=t_obs_err, absolute_sigma=True)
+m, b = popt
 obs_ttv = t_obs - (m * epochs_obs + b)
 
 if __name__ == '__main__':
