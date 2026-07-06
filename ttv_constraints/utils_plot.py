@@ -41,11 +41,19 @@ def plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred, uncertainty, save
             tt.append(t_pred[idx[0]])
     tt = np.array(tt)
 
-    axs[0].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-t_const_P_obs[0:-20])*24*60, color='#dbb6b6', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
-    axs[1].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-tt[0:-20])*24*60, color='lightsteelblue', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
+    axs[0].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-t_const_P_obs[0:-20])*24*60, color='#dbb6b6', \
+                    yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, \
+                    label='Observed (Past Works)', zorder=2)
+    axs[1].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-tt[0:-20])*24*60, color='lightsteelblue', \
+                    yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, \
+                    label='Observed (Past Works)', zorder=2)
 
-    axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkred', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
-    axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
+    axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkred', \
+                    yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, \
+                    label='Observed (This Work)', zorder=2)
+    axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', \
+                    yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, \
+                    label='Observed (This Work)', zorder=2)
 
     labels = ['Constant Period', 'Companion Model']
     for ax, label in zip(axs, labels):
@@ -60,7 +68,8 @@ def plot_transit_times(t_obs, epochs_obs, t_pred, epochs_pred, uncertainty, save
 
     plt.savefig(savepath, format='pdf', bbox_inches='tight');
 
-def plot_transit_times_tess(t_obs, epochs_obs, t_pred, epochs_pred, t_3, epochs_3, t_p_3, epochs_p_3, uncertainty, upper_err_3, lower_err_3, savepath):
+def plot_transit_times_tess(t_obs, epochs_obs, t_pred, epochs_pred, t_3, epochs_3, t_p_3, epochs_p_3, \
+                            uncertainty, upper_err_3, lower_err_3, savepath):
     fig, axs = plt.subplots(2, 1, figsize=(12, 10))
     plt.subplots_adjust(hspace=0.2)
     fontsize = 14
@@ -97,14 +106,26 @@ def plot_transit_times_tess(t_obs, epochs_obs, t_pred, epochs_pred, t_3, epochs_
             tt_3.append(t_p_3[idx[0]])
     tt_3 = np.array(tt_3)
 
-    axs[0].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-t_const_P_obs[0:-20])*24*60, color='lightsteelblue', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
-    axs[1].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-tt[0:-20])*24*60, color='lightsteelblue', yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, label='Observed (Past Works)', zorder=2)
+    axs[0].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-t_const_P_obs[0:-20])*24*60, color='lightsteelblue', \
+                    yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, \
+                    label='Observed (Past Works)', zorder=2)
+    axs[1].errorbar(epochs_obs[0:-20], (t_obs[0:-20]-tt[0:-20])*24*60, color='lightsteelblue', \
+                    yerr=uncertainty[0:-20]*24*60, linestyle='', marker='.', markersize=10, \
+                    label='Observed (Past Works)', zorder=2)
 
-    axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
-    axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, label='Observed (This Work)', zorder=2)
+    axs[0].errorbar(epochs_obs[-20:], (t_obs[-20:]-t_const_P_obs[-20:])*24*60, color='darkblue', \
+                    yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, \
+                    label='Observed (This Work)', zorder=2)
+    axs[1].errorbar(epochs_obs[-20:], (t_obs[-20:]-tt[-20:])*24*60, color='darkblue', \
+                    yerr=uncertainty[-20:]*24*60, linestyle='', marker='^', markersize=6, \
+                    label='Observed (This Work)', zorder=2)
 
-    axs[0].errorbar(epochs_3, (t_3-t_const_P_3)*24*60, color='#009E73', yerr=[lower_err_3*24*60, upper_err_3*24*60], linestyle='', marker='s', markersize=4, label='TESS (Naponiello 2025)', zorder=1, alpha=0.25)
-    axs[1].errorbar(epochs_3, (t_3-tt_3)*24*60, color='#009E73', yerr=[lower_err_3*24*60, upper_err_3*24*60], linestyle='', marker='s', markersize=4, label='TESS (Naponiello 2025)', zorder=1, alpha=0.25)
+    axs[0].errorbar(epochs_3, (t_3-t_const_P_3)*24*60, color='#009E73', \
+                    yerr=[lower_err_3*24*60, upper_err_3*24*60], linestyle='', \
+                    marker='s', markersize=4, label='TESS (Naponiello 2025)', zorder=1, alpha=0.25)
+    axs[1].errorbar(epochs_3, (t_3-tt_3)*24*60, color='#009E73', \
+                    yerr=[lower_err_3*24*60, upper_err_3*24*60], linestyle='', \
+                    marker='s', markersize=4, label='TESS (Naponiello 2025)', zorder=1, alpha=0.25)
     
     labels = ['Constant Period', 'Companion Model']
     for ax, label in zip(axs, labels):
@@ -145,13 +166,16 @@ def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.44948907084853, t
     if full: # not zoomed, grid search on linear scale
         masses = np.linspace(0.000003*1047.57, 0.0124*1047.57, 300) # 1047.57 converts Solar masses to Jupiter masses
         periods = np.linspace(50, 1500, 100)
-        im = ax.pcolormesh(masses, periods, likelihood_ratio.T, shading='gouraud', cmap='viridis', edgecolors='none', vmin=-4, vmax=4)
-        dashed_box = Rectangle((0.000003*1047.57, 50), (0.00381835-0.000003)*1047.57, 350, fill=False, edgecolor='black', linestyle='--', linewidth=2)
+        im = ax.pcolormesh(masses, periods, likelihood_ratio.T, shading='gouraud', cmap='viridis', \
+                           edgecolors='none', vmin=-4, vmax=4)
+        dashed_box = Rectangle((0.000003*1047.57, 50), (0.00381835-0.000003)*1047.57, 350, fill=False, \
+                                edgecolor='black', linestyle='--', linewidth=2)
         ax.add_patch(dashed_box)
     else: # zoomed, grid search on log scale
         masses = np.linspace(0.000003*1047.57, 0.00381835*1047.57, 300)
         periods = np.logspace(np.log10(50), np.log10(400), 100)
-        im = ax.pcolormesh(masses, periods, likelihood_ratio.T, shading='gouraud', cmap='viridis', edgecolors='none', vmin=-4, vmax=4)
+        im = ax.pcolormesh(masses, periods, likelihood_ratio.T, shading='gouraud', cmap='viridis', \
+                           edgecolors='none', vmin=-4, vmax=4)
     
     ax.set_aspect('auto')
     ax.set_xlabel('Mass [Jupiter masses]', fontsize=fontsize)
@@ -164,8 +188,10 @@ def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.44948907084853, t
     cbar.set_label('Log Base 10 Likelihood Ratio', rotation=90, labelpad=15, fontsize=18)
     cbar.ax.tick_params(labelsize=14)
 
-    ax.tick_params(axis='both', which='major', bottom=True, top=True, right=True, left=True, direction='in', length=12, width=1, labelsize=14)
-    ax.tick_params(axis='both', which='minor', bottom=True, top=True, right=True, left=True, direction='in', length=6, width=1, labelsize=14)
+    ax.tick_params(axis='both', which='major', bottom=True, top=True, right=True, left=True, \
+                   direction='in', length=12, width=1, labelsize=14)
+    ax.tick_params(axis='both', which='minor', bottom=True, top=True, right=True, left=True, \
+                   direction='in', length=6, width=1, labelsize=14)
 
     if title is not None:
         plt.title(title, fontsize=title_size, y=1.02)
