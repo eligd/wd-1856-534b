@@ -129,7 +129,7 @@ def plot_transit_times_tess(t_obs, epochs_obs, t_pred, epochs_pred, t_3, epochs_
 
     plt.savefig(savepath, format='pdf', bbox_inches='tight');
 
-def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.29013566804598, title=None, full=True):
+def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.44948907084853, title=None, full=True):
     fig, ax = plt.subplots(figsize=(15, 8))
     fontsize = 20
     title_size = 25
@@ -138,17 +138,18 @@ def plot_likelihood_ratio(chi2_arr, savepath, const_P_chi2=103.29013566804598, t
     likelihood_ratio_log_base_10 = likelihood_ratio_log_base_e * np.log10(np.e)
     likelihood_ratio = np.max(likelihood_ratio_log_base_10, axis=-1) # collapse along mean anomaly axis
     print("Max likelihood ratio: ", np.max(10**likelihood_ratio))
-    print("Max likelihood ratio idx: ", np.argmin(chi2_arr))
+    print("Max likelihood ratio idx: ", np.argmax(likelihood_ratio_log_base_10))
+    print("Min chi2 idx: ", np.argmin(chi2_arr)) # should be same as max likelihood ratio idx
     print("Min chi2: ", np.min(chi2_arr))
 
     if full: # not zoomed, grid search on linear scale
-        masses = np.linspace(0.000003*1047.5, 0.0124*1047.5, 300)
+        masses = np.linspace(0.000003*1047.57, 0.0124*1047.57, 300) # 1047.57 converts Solar masses to Jupiter masses
         periods = np.linspace(50, 1500, 100)
         im = ax.pcolormesh(masses, periods, likelihood_ratio.T, shading='gouraud', cmap='viridis', edgecolors='none', vmin=-4, vmax=4)
         dashed_box = Rectangle((0.000003*1047.57, 50), (0.00381835-0.000003)*1047.57, 350, fill=False, edgecolor='black', linestyle='--', linewidth=2)
         ax.add_patch(dashed_box)
     else: # zoomed, grid search on log scale
-        masses = np.linspace(0.000003*1047.5, 0.00381835*1047.5, 300)
+        masses = np.linspace(0.000003*1047.57, 0.00381835*1047.57, 300)
         periods = np.logspace(np.log10(50), np.log10(400), 100)
         im = ax.pcolormesh(masses, periods, likelihood_ratio.T, shading='gouraud', cmap='viridis', edgecolors='none', vmin=-4, vmax=4)
     
@@ -231,6 +232,6 @@ def plot_2d_density(flat_samples, savepath):
     plt.savefig(savepath, format='pdf', bbox_inches='tight')
 
 if __name__ == '__main__':
-    chi2_arr = np.load('arrays/chi2.npy')
+    chi2_arr = np.load('arrays/chi2_copy.npy')
     savepath = 'plots/likelihood_ratios.pdf'
     plot_likelihood_ratio(chi2_arr, savepath, full=True)
