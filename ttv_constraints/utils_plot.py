@@ -232,6 +232,6 @@ def plot_2d_density(flat_samples, savepath):
     plt.savefig(savepath, format='pdf', bbox_inches='tight')
 
 if __name__ == '__main__':
-    chi2_arr = np.load('arrays/chi2_copy.npy')
+    chi2_arr = np.load('arrays/chi2.npy')
     savepath = 'plots/likelihood_ratios.pdf'
     plot_likelihood_ratio(chi2_arr, savepath, full=True)
