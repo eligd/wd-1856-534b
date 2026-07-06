@@ -26,7 +26,8 @@ p2_mean_anomaly_init = 210.91
 p2_argument_init = 0
 p2_longnode_init = 0
 log_f_init = np.log(0.01)
-theta_initial = np.array([p2_mass_init, p2_period_init, p2_eccentricity_init, p2_inclination_init, p2_longnode_init, p2_argument_init, p2_mean_anomaly_init, log_f_init])
+theta_initial = np.array([p2_mass_init, p2_period_init, p2_eccentricity_init, p2_inclination_init, \
+                          p2_longnode_init, p2_argument_init, p2_mean_anomaly_init, log_f_init])
 
 # get config file
 parser = argparse.ArgumentParser(description='TTV constraints using grid search')
@@ -225,7 +226,7 @@ for i in range(ndim):
     mcmc = np.percentile(flat_samples[:,i],[16,50,84]) # here use 16th, 50th, and 84th percentiles
     print(labels[i], mcmc[1])
 
-# plot final curve
+# plot final O-C values
 theta_mcmc = []
 for j in np.arange(ndim):
     i = np.median(flat_samples[:, j])
