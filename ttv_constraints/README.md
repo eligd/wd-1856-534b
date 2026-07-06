@@ -7,6 +7,7 @@
     - Yields poor constraints, but still useful for checking if 3D grid search is missing promising regions of 7D phase space
 - `utils.py`: utility functions, currently only for implementing Rømer delay correction (see below)
 - `utils_plot.py`: plotting functions
+- `o-c_tess.py`: plot transit timing variations with TESS data included
 - `config_files`: directory for sample configuration files
 
 ## Inputs (set in config file)
